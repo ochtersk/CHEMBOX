@@ -10,17 +10,19 @@ def test_eval(test_input, expected):
     assert eval(test_input) == expected
 
 @pytest.mark.parametrize("test_input,sfcode,sfid", [
-    ("0.312","LDSSS", "NNSSU" ),
-    ("0.00312", "LDLLSSS","NNNNSSU"),
-    ("0.0302", "LDLSMS", "NNNSSU"),
-    ("0.83100000","LDSSSTTTTT","NNSSSSSSSU"),
-    ("0.030200", "LDLSMSTT","NNNSSSSU"),
+    ("0.312","LDSSS", "N.SSU" ),
+    ("0.00312", "LDLLSSS","N.NNSSU"),
+    ("0.0302", "LDLSMS", "N.NSSU"),
+    ("0.83100000","LDSSSTTTTT","N.SSSSSSSU"),
+    ("0.030200", "LDLSMSTT","N.NSSSSU"),
     ("302", "SMS", "SSU"),
     ("312", "SSS", "SSU"),
-    ("312.", "SSSD", "SSUN"),
-    ('0.00026040460','LDLLLSSMSMSST','NNNNNSSSSSSSU'),
-    ("30200", "SMSNN", "SSUNN"),
-    ("30200.", "SMSTTD", "SSSSUN"),
+    ("312.", "SSSD", "SSU."),
+    ('0.00026040460','LDLLLSSMSMSST','N.NNNSSSSSSSU'),
+    ("30200", "SMSTT", "SSUNN"),
+    ("330200", "SSMSTT", "SSSUNN"),
+    ("-30200", "sSMSTT", "NSSUNN"),
+    ("-30200.1", "sSMSMMDS", "NSSSSS.U"),
 ])
 def test_create(test_input,sfcode,sfid):
     num = SciSigFig(test_input)
@@ -97,7 +99,7 @@ def _validate_number(nsf,exp,ztypes,numberstr):
     """
     number = Decimal(numberstr)
     valid = True
-    print("VALID exp,nsf,ztypes numberstr:" +str(exp) + " " + str(nsf) + " " + str(ztypes) + " " + numberstr)
+    #print("VALID exp,nsf,ztypes numberstr:" +str(exp) + " " + str(nsf) + " " + str(ztypes) + " " + numberstr)
     if ztypes is None:
         ztypes = '' #no expectations for zeros
     if exp is None:
@@ -110,13 +112,13 @@ def _validate_number(nsf,exp,ztypes,numberstr):
         nsf_lo, nsf_hi=SciSigFig.default_nsf()
     else:
         nsf_lo, nsf_hi = (nsf,nsf)
-    print("NSF range:" + ",".join([str(nsf_lo),str(nsf_hi)]))
+    #print("NSF range:" + ",".join([str(nsf_lo),str(nsf_hi)]))
     range_hi = Decimal((0,tuple([1]),exp_hi))
     range_lo = Decimal((0,tuple([1]),exp_lo))
     if 'L' in ztypes:
-        print("L exp,nsf:" +str(exp_lo) + " " + str(nsf))
+        #print("L exp,nsf:" +str(exp_lo) + " " + str(nsf))
         if (number < 10**(-8) or number > 10**0):
-            print("Leading zero number out of range:" + " ".join([str(10**-8),numberstr,str(10**0)]))
+            #print("Leading zero number out of range:" + " ".join([str(10**-8),numberstr,str(10**0)]))
             valid = False
     elif (number > range_hi or number < range_lo):
         #print("number out of range:" + " ".join([str(range_lo),numberstr,str(range_hi)]))
@@ -207,7 +209,19 @@ def test_generate_ztypes_defaults(ztypes_in,ntype):
     valid = _validate_number(None,None,ztypes_in,number)
     if ntype == 'scientific':
         valid = 'e' in number
-    print("number:" + number + " ntype:" + str(ntype))
+    #print("number:" + number + " ntype:" + str(ntype))
     #valid = True
     #XXX fix this test
     assert valid == True
+
+@pytest.mark.parametrize("target,pct",[
+(10,10),
+(100,15),
+(-200,12),
+(20,0)
+])
+def test_approximate_magnitude(target, pct):
+    aa = SciSigFig.approximate_magnitude(target,pct)
+    error = abs(aa.number-target)/target
+    #print("target:",target," pct:",pct, " aa:",aa.number," error:",error)
+    assert error <= pct/100

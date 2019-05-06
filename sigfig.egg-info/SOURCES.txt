@@ -1,6 +1,8 @@
 setup.py
 sigfig/__init__.py
 sigfig/createsf.py
+sigfig/roundsf.py
+sigfig/sfmath.py
 sigfig.egg-info/PKG-INFO
 sigfig.egg-info/SOURCES.txt
 sigfig.egg-info/dependency_links.txt

@@ -2,35 +2,131 @@ from decimal import *
 from random import *
 
 class SciSigFig:
+    """
+    This class implements Scientific significant digits math, like you learned
+    in high school (or college science class), like this:
+    http://chemistry.bd.psu.edu/jircitano/sigfigs.html.
 
-    def __init__(self,numstring, notation="normal"):
+    Properties
+    ----------
+        number = a Decimal representation of the number. This is used for all
+            the math.
+        sfcode = a code with a character for each type of digit or character in
+            the string representation of the number
+            S=significant, L=leading 0, M=middle 0 T=trailing 0, D=decimal,
+            s = sign
+        sfid = a code with an identifier for the type of digit it is
+            S=sig, N=nonsig, U=uncertain
+        sfcount = the number of significant digits in the number. It is the
+            number of sf in the incoming number if it is supplied. If not,
+            the number is assumed to come from a calculation, where self.number will
+            be set to the full precision calculated value, and the number of sf is
+            set (via the force_sfcount method) to the number of sf the number should
+            have on representation. This allows calculations to be chained together
+            like (a-b)/c, and the sf will be done right.
+        uexp = the location of the uncertain digit as an exponent of 10 (-1=0.1)
+        notation = whether thios number should be represeted in normal or
+            scientific notation
+
+        Public Methods
+        --------------
+        __init__(numstring, notation="normal", exact=False)
+            turns numstring into a number. If (optional) exact is True, then the
+            number is stored with (right now) 20 digits. The optional notation
+            parameter turns of scientific notation if it is set to "scientific".
+        __str__ returns a representation (either normal or scientific) of the
+            number to the number of sf in sfcount.
+        __repr__ returns a list of the values of all the Properties
+        default_exp returns a default range of powers of 10 a randomly generated
+            number should fall in. Currently returns (-3,5)
+        default_nsf returns a default range for the number of sf in a
+            random number. Currently returns (4,8)
+        generate(exp_range=None,notation="regular",ztypes=None,nsf_range=None)
+            generates a random number with the characteristic specified.
+            all parameters are optional
+            exp_range is a tuple with the range of the number (as powers of 10)
+            notation is "normal" or "scientific"
+            ztypes is the types of zeros that should be in the number
+                L = leading, M = middle, T = trailing or N for no zeroes.
+                L doesn't make sense for scienitifc notation.
+            nsf_range is the range of number of sf to use
+        round_digpos(position)
+            round the number to the nearest 10^-position
+        round_numdig(numdig)
+            round the number to a particular number of digits
+        force_sfcount(n_sigfig)
+            force sfcount to a particular value - this only affects how the
+            number is represented as a string, not how it is represented internally
+        add(addend)
+        __add__(addend)
+            return a new SciSigFig which is the sum of two SciSigFig's. The new
+            number is stored with full precision, but sfcount is set to the
+            proper value given the sf in the addends.
+        subtract(subtrahend)
+        __sub__(subtrahend)
+            return a new SciSigFig which is the subtraction of two SciSigFig's. The new
+            number is stored with full precision, but sfcount is set to the
+            proper value given the sf in the terms.
+        multiply(mult)
+        __mul__(mult)
+            return a new SciSigFig which is the product of two SciSigFig's. The new
+            number is stored with full precision, but sfcount is set to the
+            proper value given the sf in the terms.
+        divide(denom)
+        __truediv__(denom)
+            return a new SciSigFig which is the division of two SciSigFig's. The new
+            number is stored with full precision, but sfcount is set to the
+            proper value given the sf in the terms.
+
+    """
+    EXACTPRECISION = 20 # the precision of "exact" numbers
+    defined_constants = {
+        'AVOGADRO' : '6.02214076e+23'
+        }
+    # these are any predefined constant we'd like to use they are assumed to
+    # be exact
+    def __init__(self,numstring, notation="normal", exact=False):
+        if numstring in SciSigFig.defined_constants.keys():
+            numstring = SciSigFig.defined_constants[numstring]
+            exact = True
         self.number = Decimal(numstring)
+        if exact:   # force teh number to have plenty of digits
+            sign,digits,dec_exp = self.number.as_tuple()
+            zeros_to_add = SciSigFig.EXACTPRECISION -len(digits)
+            zeroes = tuple([0]*zeros_to_add)
+            newdigits = digits+zeroes
+            newexp = dec_exp-zeros_to_add
+            self.number = Decimal((sign,newdigits,newexp))
+            numstring = str(self.number)
         self.sfcode = '' # holds specific character type
                          # S=sig, L=leading0, M=middle0 T=trailing0, D=decimal
         self.sfid = '' # holds type of each digit S=sig, N=nonsig, U=uncerttain
         self.sfcount = 0 # total nummer of sig digits
         self.uexp = 0 # exponent of the uncertain digit position
         self.notation= notation
-        result = self._sfcode(str(numstring))
+        self._sfcode(str(numstring))
         return None
 
     def __repr__(self):
-        numstr = str(self)
-        return ' number:%s\n sfcode:%s\n   sfid:%s\n fcount:%s\n   uexp:%s\n notation:%s' % \
+        numstr = str(self.number)
+        return ' numstr:%s\n  sfcode:%s\n    sfid:%s\n sfcount:%s\n    uexp:%s\nnotation:%s' % \
             (numstr, self.sfcode,self.sfid,self.sfcount,self.uexp,self.notation)
 
     def __str__(self):
         numstr = ''
+        nsf = self.sfcount
         if self.notation == 'scientific':
-            nsf = self.sfcount
             if nsf>0:
                 format_str = "{:."+str(nsf-1)+"e}"
-                print("__str__ format:",format_str)
+                #print("__str__ format:",format_str)
                 numstr = format_str.format(self.number)
             else:
                 numstr= "0"
         else:
-            numstr = str(self.number)
+            sign,digits,dec_exp = self.number.as_tuple()
+            position = (len(digits)+dec_exp) - nsf
+            numstr = str(round(self.number,-position))
+            #print("\nnormal notation:", numstr, " pos:",position, "nfs:",nsf)
         return numstr
 
     def _sfcode(self,numstring): # takes a Decimal representation
@@ -54,6 +150,9 @@ class SciSigFig:
             elif character == '.':
                 sfcode.append('D')
                 has_decimal = True
+            elif character == '-':
+                sfcode.append('s')
+                continue
             else: # assuming [1-9] here
                 sfcode.append('S')
                 if n_zeros > 0 or (n_char == 0):
@@ -63,7 +162,8 @@ class SciSigFig:
                     n_zeros = 0 # reset counter
             n_char += 1
             if verbose>2:
-                print(character + ":" + ''.join(sfcode))
+                print("nchar:",n_char," char:",character + ":" + ''.join(sfcode))
+                print("zt_idx:", zt_idx, " n_zeros:", n_zeros)
         found_M=True
         for index in range(len(sfcode)-1,-1,-1):
             if sfcode[index] != 'M' and sfcode[index] != 'D' :
@@ -75,16 +175,18 @@ class SciSigFig:
 
         sfid = []
         sfcount = 0
-        for index in range(len(sfcode)):
-            character = sfcode[index]
-            if not has_decimal and character == 'T':
-                sfcode[index]='N'
-                character= 'N'
-            if (character in ('S','M','T')):
+        for character in sfcode:
+            if not has_decimal and character == 'T': # trailing zeros not sig unless decimal
+                sfid.append('N')
+            elif (character in ('S','M','T')):
                 sfid.append('S')
                 sfcount += 1
+            elif character == "D":
+                sfid.append('.')
             else:
                 sfid.append('N')
+            #print("sfid:",sfid," char:",character)
+
         for index in range(len(sfid)-1,-1,-1): #last SF is uncertain
             if sfid[index] == 'S':
                 upos= len(sfid)-index
@@ -216,51 +318,93 @@ class SciSigFig:
         #print("--------------")
         return strnumber
 
-#   XXX TODO def set_rounding_type
+    def approximate_magnitude(target=10.0,percent=10.0,nsf_range=None):
+        diff = random()*percent/100.0*target
+        sign = 1 if random() < 0.5 else -1
+        magnitude = target + sign*diff
+        if nsf_range is None:
+            nsf_range = [3,5]
+        nsf = randint(*nsf_range)
+        new = SciSigFig(str(magnitude))
+        new.round_numdig(nsf)
+        return new
+
 
     def round_digpos(self,position):
         #print("position:",position)
         #print("self:",str(self))
         #print("repr:\n"+repr(self))
-        rndnum = SciSigFig(round(self.number,-position))
+        roundnumstr = str(round(self.number,-position))
+        #print("roundnumstr:",roundnumstr)
+        roundnum = SciSigFig(roundnumstr)
         # i used -position because I want to round to nearest 10^-position
-        self.number = rndnum.number
-        result = self._sfcode(str(rndnum.number))
+        #print("roundnum:\n"+repr(roundnum))
+        result = self._sfcode(str(roundnum.number))
 
     def round_numdig(self,numdig):
         sign,digits,dec_exp = self.number.as_tuple()
         position = (len(digits)+dec_exp) - numdig
-        print("position:",position," = - exp:",(len(digits)+dec_exp)," - numdig:",-numdig)
+        #print("position:",position," = - exp:",(len(digits)+dec_exp)," - numdig:",-numdig)
         #print("self:",str(self))
         #print("repr:\n"+repr(self))
         rndnum = SciSigFig(round(self.number,-position))
-        print(" rndnum:",str(rndnum))
-        print("repr:\n"+repr(rndnum))
+        #print(" rndnum:",str(rndnum))
+        #print("repr:\n"+repr(rndnum))
         # i used -position because I want to round to nearest 10^-position
         self.number = rndnum.number
         result = self._sfcode(str(rndnum.number))
 
+    def force_sfcount(self,n_sigfig):
+        self.sfcount = n_sigfig
 
 # now for math methods
 
     def add(self,addend):
         max_uexp = max(self.uexp,addend.uexp)
         result = SciSigFig(self.number + addend.number)
-        return (result,max_uexp)
+        #print("\n>>add1:", max_uexp, "\n--result:",repr(result))
+        roundnumstr = str(round(result.number,-max_uexp))
+        temp = SciSigFig(roundnumstr)
+        #print("\n>>add2:", roundnumstr, "\n--temp:",repr(temp))
+        n_sigfig = temp.sfcount
+        result.force_sfcount(n_sigfig)
+        return (result)
+
+    def __add__(self,addend):
+        return self.add(addend)
+
 
     def subtract(self,sub):
         max_uexp = max(self.uexp,sub.uexp)
         result = SciSigFig(self.number - sub.number)
-        return (result,max_uexp)
+        #print("\n>>sub1:", max_uexp, "\n--result:",repr(result))
+        roundnumstr = str(round(result.number,-max_uexp))
+        temp = SciSigFig(roundnumstr)
+        #print("\n>>sub2:", roundnumstr, "\n--temp:",repr(temp))
+        n_sigfig = temp.sfcount
+        result.force_sfcount(n_sigfig)
+        return (result)
+
+    def __sub__(self,subtrahend):
+        return self.subtract(subtrahend)
 
     def multiply(self,mult):
         min_sf = min(self.sfcount,mult.sfcount)
         #print("operands:",self.number, mult.number)
         result = SciSigFig(self.number * mult.number)
-        return (result,min_sf)
+        #print("multiply answer:",repr(result))
+        result.force_sfcount(min_sf)
+        return (result)
+
+    def __mul__(self,mult):
+        return self.multiply(mult)
 
     def divide(self,mult):
         min_sf = min(self.sfcount,mult.sfcount)
         result = SciSigFig(self.number / mult.number)
-        print("answwer:",str(result))
-        return (result,min_sf)
+        #print("answwer:",str(result))
+        result.force_sfcount(min_sf)
+        return (result)
+
+    def __truediv__(self,denom):
+        return self.divide(denom)

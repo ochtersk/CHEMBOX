@@ -1,15 +1,15 @@
-ADD EXACT
-TEST EXACT
-save to github
+add EXACT
+test EXACT
+DONE save to github
 make web page
   question
   answer reveal
   explanation reveal
 
 rounding
-   > uexp found <- it took three days of coding to figure out what that meant, and why I needed it
-   > now round
+DONE   > uexp found <- it took three days of coding to figure out what that meant, and why I needed it
+DONE   > now round
 math
-  multiplication/division
-  addition/subtraction
-  multiple
+DONE  multiplication/division
+DONE  addition/subtraction
+      multiple
