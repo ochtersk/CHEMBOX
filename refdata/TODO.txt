@@ -1,0 +1,6 @@
+element data object
+compound data object
+  *molec formula
+  name
+  list of struct formula
+  
