@@ -1,0 +1,18 @@
+{ "chemplates" :[
+  {"density1": {
+    "text" :["this is the first density template",
+             "this is the second density template",
+           ],
+    "sources" : {
+      "mass" : { "generate" : {"range" : "0-25", "units" : "g" },
+      "density" : {"refdata" : {"property": "density"}}
+    },
+    "templateVals" : {
+      "mass" : ["mass", "value"],
+      "property" : ["density","property"],
+      "chemicalName" : ["density", "chemicalName"],
+      "density" : ["density", "value"],
+    }
+  }
+
+}

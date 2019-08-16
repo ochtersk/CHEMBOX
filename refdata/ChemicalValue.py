@@ -1,7 +1,7 @@
 import itertools
 
 class ChemicalValue():
-    """ ChemicalValue class for ChemBox to hold chemical identifiaction info
+    """ ChemicalValue class for ChemBox to hold chemical identification info
 
         Properties:
         a unique identifier and formula data ()

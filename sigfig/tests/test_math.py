@@ -41,16 +41,16 @@ def test_addsub(a,operator,b,answer,overload):
             res = aa+ba
         else:
             res = aa.add(ba)
-        print("ADD:",aa,"+",ba, "round to:",res.sfcount)
+        #print("ADD:",aa,"+",ba, "round to:",res.sfcount)
     elif operator == "-":
         if overload:
             res = aa-ba
         else:
             res = aa.subtract(ba)
-        print("SUB:",aa,"-",ba, "round to:",res.sfcount)
+        #print("SUB:",aa,"-",ba, "round to:",res.sfcount)
     else:
         pass
-    print("result:\n", repr(res))
+    #print("result:\n", repr(res))
     assert str(res) == answer
 
 @pytest.mark.parametrize("overload",[0,1])
@@ -85,46 +85,46 @@ def test_muldiv(a,operator,b,answer,overload):
             res = aa*ba
         else:
             res = aa.multiply(ba)
-        print("MUL:",aa,"*",ba, "round to:", res.sfcount)
+        #print("MUL:",aa,"*",ba, "round to:", res.sfcount)
     elif operator == "/":
         if overload:
             res = aa/ba
         else:
             res = SciSigFig.divide(aa,ba)
-        print("DIV:",aa,"/",ba, "round to:",res.sfcount)
+        #print("DIV:",aa,"/",ba, "round to:",res.sfcount)
     else:
         pass
-    print("result:\n", repr(res))
+    #print("result:\n", repr(res))
     assert str(res) == answer
 
 
 
 def test_math_chaining():
-    print("CHAIN-------------------------------------------------")
+    #print("CHAIN-------------------------------------------------")
     aa = SciSigFig("23.72")
     ba = SciSigFig("22.72")
     ca = SciSigFig("2.345678")
     res1 = (aa-ba)
-    print("result1:\n", repr(res1), "\nround to:", res1.sfcount)
+    #print("result1:\n", repr(res1), "\nround to:", res1.sfcount)
     res = (aa-ba)/ca
-    print("result2:\n", repr(res), "\nround to:", res.sfcount)
+    #print("result2:\n", repr(res), "\nround to:", res.sfcount)
     assert str(res) == "0.426"
 
 
 
 def test_exactnumbers_normal():
     aa = SciSigFig("1",exact = True)
-    print("exact repr:\n", repr(aa),"\n exact str",str(aa))
+    #print("exact repr:\n", repr(aa),"\n exact str",str(aa))
     assert str(aa) == '1.0000000000000000000'
 
 def test_exactnumbers_exp():
     aa = SciSigFig("6.02214076e23",exact = True)
-    print("exact repr:\n", repr(aa),"\n exact str",str(aa))
+    #print("exact repr:\n", repr(aa),"\n exact str",str(aa))
     assert str(aa) == '6.0221407600000000000e+23'
 
 def test_exactnumbers_defined_constants():
     aa = SciSigFig("AVOGADRO")
-    print("exact repr:\n", repr(aa),"\n exact str",str(aa))
+    #print("exact repr:\n", repr(aa),"\n exact str",str(aa))
     assert str(aa) == '6.0221407600000000000e+23'
 
 
@@ -133,11 +133,11 @@ def test_exactnumbers_defined_constants():
     ("2","6.68","13.4","0.299","3.34"),
 ])
 def test_exactmath(exactnum,floatnum,multans,divans,divans2):
-    print("---------EXACT MATH--------\n")
+    #print("---------EXACT MATH--------\n")
     exact = SciSigFig(exactnum,exact = True)
     flt = SciSigFig(floatnum)
     mulres = exact*flt
-    print("mulres:\n", repr(mulres), "\nround to:", mulres.sfcount)
+    #print("mulres:\n", repr(mulres), "\nround to:", mulres.sfcount)
     assert str(mulres) == multans
     divres = exact/flt
     assert str(divres) == divans

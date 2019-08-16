@@ -30,11 +30,13 @@ class DataValue():
 
     def __str__(self):
         mag = str(self.magnitude)
-        return f'DV: {mag} {self.units}'
+        units = str(self.units)
+        #no trailing space if no units
+        return ' '.join(filter(None,[mag,units]))
 
     def __repr__(self):
         mag = repr(self.magnitude)
-        return f'DV: {mag} units:{self.units}'
+        return f'DV.DataValue("{mag}", "{self.units}")'
 
     def __mul__(self,other):
         mag = self.magnitude*other.magnitude

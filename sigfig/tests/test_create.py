@@ -218,6 +218,7 @@ def test_generate_ztypes_defaults(ztypes_in,ntype):
 (10,10),
 (100,15),
 (-200,12),
+(-200,2),
 (20,0)
 ])
 def test_approximate_magnitude(target, pct):
@@ -225,3 +226,26 @@ def test_approximate_magnitude(target, pct):
     error = abs(aa.number-target)/target
     #print("target:",target," pct:",pct, " aa:",aa.number," error:",error)
     assert error <= pct/100
+
+@pytest.mark.parametrize("low,high,nsf_range",[
+(0.01,10,None),
+(100,115,None),
+(-212,-201,None),
+(0,1,None),
+(0.01,.011,None),
+(0.01,10,[6,6]),
+(100,115,[6,6]),
+(-212,-201,[3,3]),
+(-201,-200,[3,3]),
+(0,1,[4,4]),
+(0.01,.011,[4,4]),
+])
+def test_approximate_magnitude_range(low,high,nsf_range):
+    aa = SciSigFig.in_range(low=low,high=high,nsf_range=nsf_range)
+    #print("low:",low, " aa:",aa.number," high:",high," nsf:",str(nsf_range))
+
+    assert aa.number >= Decimal(low) and aa.number <= Decimal(high)
+    if nsf_range is None:
+        assert aa.sfcount >= 3 and aa.sfcount <= 5
+    else:
+        assert aa.sfcount == nsf_range[0]

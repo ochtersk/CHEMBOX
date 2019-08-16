@@ -1,6 +1,9 @@
 {
   "SigFig/test/test_SigFig.py": true, 
   "probgen/tests/test_init.py": true, 
+  "refdata/tests/test_dataunits.py": true, 
+  "refdata/tests/test_datavalue.py": true, 
+  "refdata/tests/test_refdata.py": true, 
   "sigfig/tests/test_create.py": true, 
   "sigfig/tests/test_create.py::test__determine_num_zeros[exp_in0-nsf_in0--1]": true, 
   "sigfig/tests/test_create.py::test__determine_num_zeros[exp_in0-nsf_in0-None-1]": true, 

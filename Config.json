@@ -1,0 +1,9 @@
+{
+    "rootdir": "/home/ochtersk/chembox/",
+    "ChemDataDB":{
+        "filename":"refdata/ChemDataDB.json"
+    },
+    "ChemValueDB":{
+        "filename":"refdata/ChemValueDB.json"
+    }
+}

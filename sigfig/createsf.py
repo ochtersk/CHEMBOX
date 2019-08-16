@@ -90,7 +90,7 @@ class SciSigFig:
             numstring = SciSigFig.defined_constants[numstring]
             exact = True
         self.number = Decimal(numstring)
-        if exact:   # force teh number to have plenty of digits
+        if exact:   # force the number to have plenty of digits
             sign,digits,dec_exp = self.number.as_tuple()
             zeros_to_add = SciSigFig.EXACTPRECISION -len(digits)
             zeroes = tuple([0]*zeros_to_add)
@@ -109,13 +109,21 @@ class SciSigFig:
 
     def __repr__(self):
         numstr = str(self.number)
-        return ' numstr:%s\n  sfcode:%s\n    sfid:%s\n sfcount:%s\n    uexp:%s\nnotation:%s' % \
-            (numstr, self.sfcode,self.sfid,self.sfcount,self.uexp,self.notation)
+        return ' number:%s\n str(number):%s\n      sfcode:%s\n        sfid:%s\n     sfcount:%s\n        uexp:%s\n    notation:%s' % \
+            (self.number,numstr, self.sfcode,self.sfid,self.sfcount,self.uexp,self.notation)
 
     def __str__(self):
+        verbose = False
         numstr = ''
         nsf = self.sfcount
-        if self.notation == 'scientific':
+        notation = self.notation
+        sign,digits,dec_exp = self.number.as_tuple()
+        position = (len(digits)+dec_exp) - nsf
+        if verbose: print("\nnotation:",notation)
+        if (dec_exp==0) and (len(digits)==nsf) and (digits[-1]==0):
+            notation = "scientific"
+            if verbose: print("forcing scinetific notation")
+        if notation == 'scientific':
             if nsf>0:
                 format_str = "{:."+str(nsf-1)+"e}"
                 #print("__str__ format:",format_str)
@@ -123,10 +131,8 @@ class SciSigFig:
             else:
                 numstr= "0"
         else:
-            sign,digits,dec_exp = self.number.as_tuple()
-            position = (len(digits)+dec_exp) - nsf
             numstr = str(round(self.number,-position))
-            #print("\nnormal notation:", numstr, " pos:",position, "nfs:",nsf)
+            if verbose: print("\nnormal notation:", numstr, " pos:",position, "nfs:",nsf)
         return numstr
 
     def _sfcode(self,numstring): # takes a Decimal representation
@@ -329,30 +335,39 @@ class SciSigFig:
         new.round_numdig(nsf)
         return new
 
+    def in_range(low=0.01,high=20.0,nsf_range=None):
+        magnitude = uniform(low,high)
+        if nsf_range is None:
+            nsf_range = [3,5]
+        nsf = randint(*nsf_range)
+        new = SciSigFig(str(magnitude))
+        new.round_numdig(nsf)
+        return new
+
 
     def round_digpos(self,position):
-        #print("position:",position)
         #print("self:",str(self))
         #print("repr:\n"+repr(self))
-        roundnumstr = str(round(self.number,-position))
-        #print("roundnumstr:",roundnumstr)
+        comp =Decimal("1e"+str(position))
+        roundnumstr = str(self.number.quantize(comp))
         roundnum = SciSigFig(roundnumstr)
-        # i used -position because I want to round to nearest 10^-position
-        #print("roundnum:\n"+repr(roundnum))
         result = self._sfcode(str(roundnum.number))
 
     def round_numdig(self,numdig):
+        verbose = False
         sign,digits,dec_exp = self.number.as_tuple()
-        position = (len(digits)+dec_exp) - numdig
-        #print("position:",position," = - exp:",(len(digits)+dec_exp)," - numdig:",-numdig)
-        #print("self:",str(self))
-        #print("repr:\n"+repr(self))
-        rndnum = SciSigFig(round(self.number,-position))
-        #print(" rndnum:",str(rndnum))
-        #print("repr:\n"+repr(rndnum))
+        if verbose: print("tuple:",str(sign),str(digits),str(dec_exp),"\n")
+        exp = len(digits)+dec_exp
+        position = exp - numdig
+        comp = Decimal("1e"+str(position))
+        if verbose: print("position:",position," = exp:",exp," - numdig:",numdig,  "comp:",comp)
+        rndnum =Decimal(self.number).quantize(comp)
+        if verbose: print(" rndnum:",str(rndnum))
+        if verbose: print("repr:\n"+repr(rndnum))
         # i used -position because I want to round to nearest 10^-position
-        self.number = rndnum.number
-        result = self._sfcode(str(rndnum.number))
+        self.number = rndnum
+        result = self._sfcode(str(rndnum))
+        self.sfcount = numdig
 
     def force_sfcount(self,n_sigfig):
         self.sfcount = n_sigfig

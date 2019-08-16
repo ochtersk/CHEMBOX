@@ -12,6 +12,8 @@ def test_eval(test_input, expected):
 @pytest.mark.parametrize("test_input,rndto,output,outputsci,sf", [
     (1.2345678e+3,4,"0","0",0),
     (1.2345678e+3,5,"0","0",0),
+    (12000,4,"1e+4","1e+4",1),
+    (200,2,"2e+2","2e+2",1),
     (1.2345678e+3,3,"1e+3","1e+3",1),
     (1.2345678e+3,2,"1.2e+3","1.2e+3",2),
     (1.2345678e+3,1,"1.23e+3","1.23e+3",3),
@@ -27,7 +29,7 @@ def test_eval(test_input, expected):
 def test_round_loc(test_input,rndto,output,outputsci,sf):
     num = SciSigFig(test_input)
     num.round_digpos(rndto)
-    assert str(num) == output
+    assert str(num).lower() == output
     assert num.sfcount == sf
     scinum = SciSigFig(test_input, notation="scientific")
     scinum.round_digpos(rndto)
@@ -37,6 +39,8 @@ def test_round_loc(test_input,rndto,output,outputsci,sf):
 
 @pytest.mark.parametrize("test_input,rndto,output,outputsci,sf", [
     (1.2345678e+3,0,"0","0",0),
+    (12000,4,"1.200e+4","1.200e+4",4),
+    (200,3,"2.00e+2","2.00e+2",3),
     (1.2345678e+3,1,"1e+3","1e+3",1),
     (1.2345678e+3,2,"1.2e+3","1.2e+3",2),
     (1.2345678e+3,3,"1.23e+3","1.23e+3",3),
@@ -52,7 +56,8 @@ def test_round_loc(test_input,rndto,output,outputsci,sf):
 def test_round_num(test_input,rndto,output,outputsci,sf):
     num = SciSigFig(test_input)
     num.round_numdig(rndto)
-    assert str(num) == output
+    #print(repr(num))
+    assert str(num).lower() == output
     assert num.sfcount == sf
     scinum = SciSigFig(test_input, notation="scientific")
     scinum.round_numdig(rndto)
@@ -63,6 +68,8 @@ def test_round_num(test_input,rndto,output,outputsci,sf):
 @pytest.mark.parametrize("test_input,rndto,output,outputsci,sf", [
     (1.2345678e+3,4,"0","0",0),
     (1.2345678e+3,5,"0","0",0),
+    (12000,4,"1e+4","1e+4",1),
+    (200,2,"2e+2","2e+2",1),
     (1.2345678e+3,3,"1e+3","1e+3",1),
     (1.2345678e+3,2,"1.2e+3","1.2e+3",2),
     (1.2345678e+3,1,"1.23e+3","1.23e+3",3),
@@ -78,7 +85,7 @@ def test_round_num(test_input,rndto,output,outputsci,sf):
 def test_sround_loc(test_input,rndto,output,outputsci,sf):
     num = SciSigFig(test_input)
     num.round_digpos(rndto)
-    assert str(num) == output
+    assert str(num).lower() == output
     assert num.sfcount == sf
     scinum = SciSigFig(test_input, notation="scientific")
     scinum.round_digpos(rndto)
@@ -88,6 +95,8 @@ def test_sround_loc(test_input,rndto,output,outputsci,sf):
 
 @pytest.mark.parametrize("test_input,rndto,output,outputsci,sf", [
     (1.2345678e+3,0,"0","0",0),
+    (12000,4,"1.200e+4","1.200e+4",4),
+    (200,3,"2.00e+2","2.00e+2",3),
     (1.2345678e+3,1,"1e+3","1e+3",1),
     (1.2345678e+3,2,"1.2e+3","1.2e+3",2),
     (1.2345678e+3,3,"1.23e+3","1.23e+3",3),
@@ -103,7 +112,7 @@ def test_sround_loc(test_input,rndto,output,outputsci,sf):
 def test_sround_num(test_input,rndto,output,outputsci,sf):
     num = SciSigFig(test_input)
     num.round_numdig(rndto)
-    assert str(num) == output
+    assert str(num).lower() == output
     assert num.sfcount == sf
     scinum = SciSigFig(test_input, notation="scientific")
     scinum.round_numdig(rndto)
