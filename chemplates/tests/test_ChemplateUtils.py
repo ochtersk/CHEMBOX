@@ -66,3 +66,5 @@ def test_assignvals_multisources():
     #print("VALS:",pformat(vals))
     assert str(vals['vrand1']) == str(DV.DataValue("123.456"))
     assert str(vals['vrand2']) == str(DV.DataValue("123.567"))
+
+#documenation
