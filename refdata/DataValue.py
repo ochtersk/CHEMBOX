@@ -27,7 +27,6 @@ class DataValue():
     def __init__(self, magnitude = None , units = None, unitsformat = '', ):
         if units is None:
             if magnitude is not None:
-                print("DV input:",magnitude)
                 if ' ' in magnitude:
                     (magnitude,units) = magnitude.split(sep=None)
                 else:

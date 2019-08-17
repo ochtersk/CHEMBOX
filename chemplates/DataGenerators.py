@@ -48,4 +48,4 @@ def randomValue(repl=None):
         assert False, f"config.type \"{config['type']}\" is not 'range'|'approx'"
     datavalue = DV.DataValue(str(mag), config['units'])
     if verbose: print("randomValue return:",pformat(datavalue))
-    return datavalue
+    return {'value' : datavalue}
