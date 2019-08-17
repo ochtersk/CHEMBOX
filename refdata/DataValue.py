@@ -24,7 +24,18 @@ class DataValue():
         do math with two DataValues do the right thing with sig figs and units
 
     """
-    def __init__(self, magnitude = "0.0" , units = "", unitsformat = '', ):
+    def __init__(self, magnitude = None , units = None, unitsformat = '', ):
+        if units is None:
+            if magnitude is not None:
+                print("DV input:",magnitude)
+                if ' ' in magnitude:
+                    (magnitude,units) = magnitude.split(sep=None)
+                else:
+                    units = ''
+            else:
+                units = ''
+        if magnitude is None:
+            magnitude = "0.0"
         self.magnitude = SF.SciSigFig(magnitude)
         self.units = DU.DataUnits(units, unitsformat)
 

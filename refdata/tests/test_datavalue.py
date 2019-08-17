@@ -62,3 +62,20 @@ def test_datavalue_sub_fail_units():
         z = x-y
         ##print("repr z:",repr(z))
         assert str(z) == "4.4 g"
+
+
+@pytest.mark.parametrize("magunits,answer", [
+    ("2.4 L/min","2.4 L/min"),
+    ("2.4e+2 L/min","2.4e+2 L/min"),
+    ("2.4 mol/L*min","2.4 mol/L*min"),
+    ("2.4 L/min^2","2.4 L/min^2"),
+])
+def test_DataValue_object(magunits, answer):
+    x = DV.DataValue(magunits)
+    assert str(x) == answer
+
+
+def test_DataValue_object_default():
+    x = DV.DataValue()
+    print("DV:",repr(x))
+    assert str(x) == "0.0"

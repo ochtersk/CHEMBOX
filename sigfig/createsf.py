@@ -168,17 +168,25 @@ class SciSigFig:
                     n_zeros = 0 # reset counter
             n_char += 1
             if verbose>2:
-                print("nchar:",n_char," char:",character + ":" + ''.join(sfcode))
-                print("zt_idx:", zt_idx, " n_zeros:", n_zeros)
+                print("1nchar:",n_char," char:",character + ":" + ''.join(sfcode))
+                print("1zt_idx:", zt_idx, " n_zeros:", n_zeros)
         found_M=True
+        allzeros ='D' in sfcode and (sfcode[-1] == 'L') # L in the last digit means only zeros, like 0.00
         for index in range(len(sfcode)-1,-1,-1):
+            if allzeros and sfcode[index] == "L":
+                sfcode[index] = 'T'
+                continue
             if sfcode[index] != 'M' and sfcode[index] != 'D' :
                 break
             elif sfcode[index] == 'D':
-                continue
+                if allzeros:
+                    break
+                else:
+                    continue
             else:
                 sfcode[index] = 'T'
-
+        if verbose>2:
+            print("2nchar:",n_char," char:",character + ":" + ''.join(sfcode))
         sfid = []
         sfcount = 0
         for character in sfcode:

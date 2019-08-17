@@ -9,8 +9,15 @@ import pytest
 def test_eval(test_input, expected):
     assert eval(test_input) == expected
 
+
+
+
 @pytest.mark.parametrize("test_input,sfcode,sfid", [
+    ("0.0","LDT", "N.U" ),
+    ("0","L", "N" ),
+    ("0.00","LDTT", "N.SU" ),
     ("0.312","LDSSS", "N.SSU" ),
+    ("3.12e-1","SDSS", "S.SU"),
     ("0.00312", "LDLLSSS","N.NNSSU"),
     ("0.0302", "LDLSMS", "N.NSSU"),
     ("0.83100000","LDSSSTTTTT","N.SSSSSSSU"),

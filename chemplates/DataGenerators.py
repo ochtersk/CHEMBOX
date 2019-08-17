@@ -23,6 +23,7 @@ def randomValue(repl=None):
         if no attribute, value pair or dict is specified.
 
     """
+    verbose = False
     config = {'type' : 'range',
                 'range' : {'low': 0.01, 'high': 10},
                 'approx' : {'target' : 10, 'pct': 10},
@@ -30,10 +31,11 @@ def randomValue(repl=None):
                 'nsf_range' : [3,5],
                 'units' : '',
                }
-    #print("repl:",pformat(repl))
+    if verbose: print("repl:",pformat(repl))
     if repl is not None:
         config.update(repl)
-        #print(pformat(config))
+        if verbose: print("updating:")
+    if verbose: print("randomValue config:",pformat(config))
     if config['type'] == 'range':
         mag = SF.SciSigFig.in_range(config['range']['low'],config['range']['high'],config['nsf_range'])
     elif config['type'] == 'approx':
@@ -45,4 +47,5 @@ def randomValue(repl=None):
     else:
         assert False, f"config.type \"{config['type']}\" is not 'range'|'approx'"
     datavalue = DV.DataValue(str(mag), config['units'])
+    if verbose: print("randomValue return:",pformat(datavalue))
     return datavalue
