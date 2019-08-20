@@ -25,16 +25,24 @@ class DataValue():
 
     """
     def __init__(self, magnitude = None , units = None, unitsformat = '', ):
-        if units is None:
-            if magnitude is not None:
-                if ' ' in magnitude:
-                    (magnitude,units) = magnitude.split(sep=None)
-                else:
-                    units = ''
+        verbose = False
+        if verbose: print("DV init params mag rep:",repr(magnitude),"units:",units)
+        if isinstance(magnitude,DataValue):
+                magnitude, units = str(magnitude.magnitude), str(magnitude.units)
+        elif isinstance(magnitude,str) and units is None:
+            if ' ' in magnitude:
+                (magnitude,units) = magnitude.split(sep=None)
             else:
                 units = ''
-        if magnitude is None:
+        elif isinstance(magnitude,str) and units is not None:
+            pass
+        elif magnitude is None:
             magnitude = "0.0"
+            units = ''
+        else: #handle ints and floats
+            magnitude = magnitude
+            units = ''
+        if verbose: print("DV init mag:", magnitude,"units:",units)
         self.magnitude = SF.SciSigFig(magnitude)
         self.units = DU.DataUnits(units, unitsformat)
 
@@ -49,6 +57,7 @@ class DataValue():
         return f'DV.DataValue("{mag}", "{self.units}")'
 
     def __mul__(self,other):
+        other = DataValue(other)
         mag = self.magnitude*other.magnitude
         units = self.units*other.units
         new = DataValue()
@@ -57,8 +66,10 @@ class DataValue():
         #print("mul new:",repr(new), "\n mag:",mag)
         return new
 
+    __rmul__ = __mul__
 
     def __truediv__(self,other):
+        other = DataValue(other)
         mag = self.magnitude/other.magnitude
         units = self.units/other.units
         new = DataValue()
@@ -68,6 +79,7 @@ class DataValue():
         return new
 
     def __add__(self,other):
+        other = DataValue(other)
         mag = self.magnitude+other.magnitude
         units = self.units+other.units
         new = DataValue()
@@ -78,10 +90,13 @@ class DataValue():
 
 
     def __sub__(self,other):
+        verbose = False
+        other = DataValue(other)
+        if verbose: print("sub self",repr(self),"other:",repr(other))
         mag = self.magnitude-other.magnitude
         units = self.units-other.units
         new = DataValue()
         new.magnitude = mag
         new.units = units
-        #print("sub new:",repr(new), "\n mag:",mag)
+        if verbose: print("sub new:",repr(new), "\n mag:",mag)
         return new
