@@ -1,4 +1,5 @@
 from collections import Counter
+from pprint import pformat
 
 class DataUnits():
     """
@@ -57,7 +58,9 @@ class DataUnits():
             splitted = [(unit.split("^")) for unit in unexpanded]
             expanded = [x if len(x)==1 else int(x[1])*[x[0]] for x in splitted  ]
             final = [x for row in expanded for x in row]
+            final=list(filter(None,final))
             self.units.append(final)
+        #print("DU init:",units, "out:",pformat(self.units))
 
     def _fromLists(numerator,denominator):
         """Create a DataUnits object from 2 lists of units
@@ -95,7 +98,9 @@ class DataUnits():
         None
 
         """
+        verbose = False
         numerator, denominator = self.units
+        if verbose: print("In numer:",pformat(numerator), "denom:",pformat(denominator))
         if self.unitsformat == "expanded":
             denominator_str = '*'.join(denominator)
             numerator_str = "*".join(numerator)
@@ -110,6 +115,7 @@ class DataUnits():
             numerator_str = "*".join(n_units)
         if denominator_str == "1":
             denominator_str = ""
+        if verbose: print("OUT numer:",numerator_str, "denom:",denominator_str)
         if denominator_str:
             if not numerator_str:
                 numerator_str = "1"
@@ -126,8 +132,10 @@ class DataUnits():
         other: the units to multiply self by.
 
         """
-        numerator, denominator = self.units
-        other_numerator, other_denominator = other.units
+        numerator = self.units[0].copy()
+        denominator = self.units[1].copy()
+        other_numerator = other.units[0].copy()
+        other_denominator = other.units[1].copy()
         numerator.extend(other_numerator)
         denominator.extend(other_denominator)
         # This bit does the cancelling - it counts the occurences of units in

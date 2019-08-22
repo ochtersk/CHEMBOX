@@ -107,6 +107,9 @@ class SciSigFig:
         self._sfcode(str(numstring))
         return None
 
+    def __float__(self):
+        return float(self.number)
+
     def __repr__(self):
         numstr = str(self.number)
         return ' number:%s\n str(number):%s\n      sfcode:%s\n        sfid:%s\n     sfcount:%s\n        uexp:%s\n    notation:%s' % \

@@ -46,6 +46,6 @@ def randomValue(repl=None):
         mag = SF.SciSigFig(str(numberstr))
     else:
         assert False, f"config.type \"{config['type']}\" is not 'range'|'approx'"
-    datavalue = DV.DataValue(str(mag), config['units'])
+    datavalue = DV.DataValue(magnitude=str(mag), units=config['units'])
     if verbose: print("randomValue return:",pformat(datavalue))
     return {'value' : datavalue}

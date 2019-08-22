@@ -54,7 +54,8 @@ class DataValue():
 
     def __repr__(self):
         mag = repr(self.magnitude)
-        return f'DV.DataValue("{mag}", "{self.units}")'
+        units = str(self.units)
+        return f'DV.DataValue("{mag}", "{units}")'
 
     def __mul__(self,other):
         other = DataValue(other)
@@ -70,12 +71,14 @@ class DataValue():
 
     def __truediv__(self,other):
         other = DataValue(other)
+        #print("\nDIV self:",repr(self),"\nOTHER:",repr(other))
         mag = self.magnitude/other.magnitude
         units = self.units/other.units
         new = DataValue()
         new.magnitude = mag
         new.units = units
         #print("div new:",repr(new), "\n mag:",mag)
+
         return new
 
     def __add__(self,other):
@@ -100,3 +103,6 @@ class DataValue():
         new.units = units
         if verbose: print("sub new:",repr(new), "\n mag:",mag)
         return new
+
+    def __float__(self):
+        return float(self.magnitude)

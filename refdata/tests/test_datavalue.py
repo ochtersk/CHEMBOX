@@ -41,6 +41,14 @@ def test_datavalue_div():
     #print("repr z:",repr(z))
     assert str(z) == "1.2 g/mL"
 
+
+def test_datavalue_div2():
+    x = DV.DataValue("10.00", "g")
+    y = DV.DataValue("2.00", "mL")
+    z = x/y
+    #print("repr z:",repr(z))
+    assert str(z) == "5.00 g/mL"
+
 def test_datavalue_div_float_int():
     x = DV.DataValue("2.424")
     y = 2

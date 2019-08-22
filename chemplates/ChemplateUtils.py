@@ -1,7 +1,10 @@
 import copy
 from pprint import pformat
+from py_expression_eval import Parser
+from jinja2 import Template
 import chemplates.Chemplate as CP
 import chemplates.DataGenerators as DG
+
 """ These are functions that do utility work using Chemplates.
 """
 
@@ -76,3 +79,19 @@ def assignvals(map=None,resultsCP=None):
             if verbose: print("var:",var,"ID:",ID,"attr:",attr)
             valdict[var]=resultsCP.getIDattr(ID,attr)
         return valdict
+
+def fillanswerlist(answer_template_list,vars):
+    parser = Parser()
+    answer_list =[]
+    for template in answer_template_list:
+        filled = {}
+        if 'value' in template:
+            filled['value'] = parser.parse(template['value']).evaluate(vars)
+            vars['value'] = filled['value'] # now we can use it in other places
+        else:
+            assert value in templates
+        if 'text' in template:
+            jt = Template(template['text'])
+            filled['text'] = jt.render(vars)
+        answer_list.append(filled)
+    return answer_list

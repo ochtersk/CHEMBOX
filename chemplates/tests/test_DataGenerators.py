@@ -3,7 +3,7 @@ from pprint import pformat
 import chemplates.DataGenerators as DG
 
 def isinrange(val,low,high):
-    if (val>=low and val <= high):
+    if (float(val)>=low and float(val) <= high):
         return True
     else:
         print("isinrange:",low,val,high)
@@ -21,15 +21,16 @@ def isinrange(val,low,high):
     ({'type': 'approx','approx' : {'target' : 10, 'pct': 10}}, 9,11),
 ])
 def test_randomValue(repl,low,high,units):
+    #print("\ntestrepl:",pformat(repl))
     x = DG.randomValue(repl)
-    #print("repl:",pformat(repl))
     urepl = repl.copy()
     urepl.update(units)
     #print("urepl:",pformat(urepl), "units:",pformat(units))
-    assert isinrange(x.magnitude.number,low,high)
+    #print("test x:",pformat(x))
+    assert isinrange(x['value'].magnitude,low,high)
     ux = DG.randomValue(urepl)
-    assert isinrange(ux.magnitude.number,low,high)
-    assert str(ux.units) == units['units']
+    assert isinrange(ux['value'].magnitude,low,high)
+    assert str(ux['value'].units) == units['units']
     #print(pformat(str(ux)))
 
 @pytest.mark.parametrize("number, answerstr", [
@@ -42,4 +43,4 @@ def test_randomValue(repl,low,high,units):
 def test_exactnumbers(number,answerstr):
     repl = {'type': 'exact','exact' : number}
     x = DG.randomValue(repl)
-    assert str(x)==answerstr
+    assert str(x['value'].magnitude)==answerstr

@@ -55,6 +55,7 @@ def test_addsub(a,operator,b,answer,overload):
 
 @pytest.mark.parametrize("overload",[0,1])
 @pytest.mark.parametrize("a,operator,b,answer", [
+    ('10.00',"/",'2.00','5.00'),
     ("1.23","*","2.1","2.6"),
     ("1.23","*","-2.1","-2.6"),
     ("-1.23","*","2.1","-2.6"),
@@ -64,8 +65,7 @@ def test_addsub(a,operator,b,answer,overload):
     ("1.234e+1","*","2.15","26.5"),
     ("1.23e+1","*","2.15","26.4"),
     ("1.23e+1","*","2.16","26.6"),
-    ("1.23e+1","*"
-    ,"2.15e+0","26.4"),
+    ("1.23e+1","*","2.15e+0","26.4"),
     ("1.23e+1","*","2.16e+0","26.6"),
     ("1.23","/","2.1","0.59"),
     ("1.2","/","2.14","0.56"),
@@ -93,7 +93,7 @@ def test_muldiv(a,operator,b,answer,overload):
             res = SciSigFig.divide(aa,ba)
         #print("DIV:",aa,"/",ba, "round to:",res.sfcount)
     else:
-        pass
+        assert False, "bad operator:"+operator
     #print("result:\n", repr(res))
     assert str(res) == answer
 

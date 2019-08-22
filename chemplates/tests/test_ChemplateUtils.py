@@ -67,4 +67,21 @@ def test_assignvals_multisources():
     assert str(vals['vrand1']) == str(DV.DataValue("123.456"))
     assert str(vals['vrand2']) == str(DV.DataValue("123.567"))
 
-#documenation
+answer_template_1 = {
+    'value' : 'mass/density',
+    'units' : 'mL',
+    'text' : 'mass/density = ({{mass}})/{{density}} = {{value}}',
+    'correct' : 'True',
+    'reason' : 'To be implemented',
+    # 'partials' : {'partial1' : '2.0000*mass',
+    #               'partial2' : '0.50000*mass'
+    #             }
+}
+ten =  DV.DataValue('10.00 g')
+vars = { 'mass' : ten,
+         'density' : DV.DataValue('2.00 g/mL')
+         }
+answer_template_list1 = [answer_template_1]
+def test_answer_template_simple():
+    answerlist=CPU.fillanswerlist(answer_template_list1, vars)
+    assert str(answerlist[0]['value']) == str(DV.DataValue('5.00 mL'))
