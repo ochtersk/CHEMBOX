@@ -1,17 +1,30 @@
 { "chemplates" :[
   {"density1": {
-    "text" :["this is the first density template",
-             "this is the second density template",
+    "questionlist" :["What is the density of a sample with mass $mass$ and volume $volume?",
            ],
     "sources" : {
-      "mass" : { "generate" : {"range" : "0-25", "units" : "g" },
-      "density" : {"refdata" : {"property": "density"}}
+      "mass" : { "generate" : {"range" : "1-25", "units" : "g" },
+      "volume" : { "generate" : {"range" : "1-25", "units" : "mL" }
+      "density" : {"generate" : {"range" : "7-12", "units" : "g/mL" }}
     },
     "templateVals" : {
       "mass" : ["mass", "value"],
-      "property" : ["density","property"],
-      "chemicalName" : ["density", "chemicalName"],
+      "volume" : ["volume", "value"],
       "density" : ["density", "value"],
+    },
+    "answerlist" : {
+      [ {
+        "value" : { "parse_expression":{ "expression":"mass/density",
+                    "use_vals_dict": "true"}
+                  },
+        "units" : {"copy_text":{"text": "g/mL"}},
+        "text" : {"fill_template":{ "template":"mass/volume = ({{mass}})/{{volume}} = {{value}}",
+                   "use_vals_dict": "true"}
+                 },
+        "correct" : "true",
+        "reason" : {"copy_text":{"text":"To be implemented"}},
+        },
+      ]
     }
   }
 

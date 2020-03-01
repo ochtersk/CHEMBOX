@@ -1,0 +1,36 @@
+{ "chemplates" :[
+  {"density1": {
+    "questionlist" :["What is the density of a sample with mass $mass$ and volume $volume?",
+           ],
+    "sources" : {
+      "mass" : { "generate" : {"range" : "1-25", "units" : "g" },
+      "volume" : { "generate" : {"range" : "1-25", "units" : "mL" }
+      "density" : {"refdata" : {"property": "density"}}
+    },
+    "templateVals" : {
+      "mass" : ["mass", "value"],
+      "volume" : ["volume", "value"],
+      "property" : ["density","property"],
+      "chemicalName" : ["density", "chemicalName"],
+      "density" : ["density", "value"],
+    },
+    "answerlist" : {
+      [ {
+        "value" : "mass/density",
+              "units" : "g/mL",
+              "text" : "mass/volume = ({{mass}})/{{volume}} = {{value}}",
+              "correct" : "true",
+              "reason" : "To be implemented",
+        },
+        {
+          "value" : "volumemass",
+                      "units" : "g/mL",
+                      "text" : "should be: mass/volume = ({{mass}})/{{volume}} = {{value}}",
+                      "correct" : "false",
+                      "reason" : "To be implemented",
+        }
+      ]
+    }
+  }
+
+}

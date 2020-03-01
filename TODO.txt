@@ -2,3 +2,5 @@ DONE: rename chemical name stuff all to chemicalName to be consistent
 implement and test math expressions stuff
 DONE?implement stuff for changing source templates so you can have parameters to fill template
 fix test_create to not warn on sci not with no leading zeros
+fix sigfigs repr
+fix function names to snake case
