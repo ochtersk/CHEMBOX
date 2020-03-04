@@ -47,8 +47,10 @@ def create_Chemplate_from_sources(sources, overrides, vals_dict=None):
     ids = locSrc.getIDs()
     for id in ids:
         gen = locSrc.getID(ID=id)
-        if verbose: print("gen:",pformat(gen))
+        if verbose: print("gen:",type(gen),"  -->",pformat(gen))
+        assert isinstance(gen, dict)
         for (generator, args) in gen.items():
+            assert isinstance(args,dict),"create_Chemplate_from_sources:Datagenerator args must be dict"
             if "use_vals_dict" in args and args["use_vals_dict"]== "true":
                 res = _dispatch(generator, args, vals_dict )
             else:

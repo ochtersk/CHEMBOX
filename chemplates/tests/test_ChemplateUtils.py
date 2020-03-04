@@ -24,6 +24,12 @@ def test_create_Chemplate_from_sources_bad_generator():
     with pytest.raises(AssertionError):
         var = CPU.create_Chemplate_from_sources(source,overrides)
 
+def test_create_Chemplate_from_sources_bad_generator():
+    source = CP.Chemplate(DoD={'rand1a' :{'randomdalue' :  123}})
+    overrides = CP.Chemplate(DoD= {})
+    with pytest.raises(AssertionError):
+        var = CPU.create_Chemplate_from_sources(source,overrides)
+
 def test_create_Chemplate_from_sources_with_overrides1():
     overrides = CP.Chemplate(DoD={"rand2" :{'random_value' :{'type' : 'exact', 'exact' : '126.456'}}})
     source = CP.Chemplate(DoD={"rand2" :{'random_value' : {'range' : {'low': 11.0, 'high': 12.0}}}})
