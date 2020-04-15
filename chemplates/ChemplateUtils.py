@@ -1,8 +1,8 @@
 import copy
 from pprint import pformat
 #from py_expression_eval import Parser
-import chemplates.Chemplate as CP
-import chemplates.DataGenerators as DG
+import CHEMBOX.chemplates.Chemplate as CP
+import CHEMBOX.chemplates.DataGenerators as DG
 
 """ These are functions that do utility work using Chemplates.
 """

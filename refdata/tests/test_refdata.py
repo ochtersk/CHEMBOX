@@ -1,6 +1,6 @@
 import pytest
-import refdata.DataValue as DV
-import refdata.RefData as RD
+import CHEMBOX.refdata.DataValue as DV
+import CHEMBOX.refdata.RefData as RD
 
 #pytestmark = pytest.mark.skip("all tests still WIP")
 @pytest.mark.parametrize("Cprop,Cname,answer", [

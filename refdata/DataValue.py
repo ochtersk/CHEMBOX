@@ -1,6 +1,6 @@
 from collections import Counter
-import sigfig.createsf as SF
-import refdata.DataUnits as DU
+import CHEMBOX.sigfig.createsf as SF
+import CHEMBOX.refdata.DataUnits as DU
 
 class DataValue():
     """DataValue class for ChemBox to hold values and units

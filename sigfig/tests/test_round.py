@@ -1,4 +1,4 @@
-from sigfig.createsf import *
+from CHEMBOX.sigfig.createsf import *
 import pytest
 
 @pytest.mark.parametrize("test_input,expected", [

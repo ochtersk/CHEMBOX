@@ -1,7 +1,7 @@
 import pytest
 from pprint import pformat
 import copy
-import chemplates.Chemplate as CP
+import CHEMBOX.chemplates.Chemplate as CP
 
 @pytest.mark.parametrize("ID, attribute,value,answer", [
      ("Test","Attr1","seven","{'Test': {'Attr1': 'seven'}}"),

@@ -1,7 +1,7 @@
 import pytest
 from pprint import pformat
-import chemplates.DataGenerators as DG
-import refdata.DataValue as DV
+import CHEMBOX.chemplates.DataGenerators as DG
+import CHEMBOX.refdata.DataValue as DV
 
 def isinrange(val,low,high):
     if (float(val)>=low and float(val) <= high):
@@ -54,9 +54,9 @@ def test_exactnumbers(number,answerstr):
     ("one + two", {'one' : DV.DataValue("1 g"), 'two': DV.DataValue("2 g")}, DV.DataValue("3 g")),
 ])
 def test_parser(expression, vars, answer ):
-    x = DG.parse_expression(expression, vars)
+    x = DG.parse_expression({"expression":expression}, vars)
     print("test_parser x:",pformat(x))
-    assert str(x) == str(answer)
+    assert str(x["value"]) == str(answer)
 
 
 @pytest.mark.parametrize("template, vars, answer", [

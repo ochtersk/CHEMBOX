@@ -1,8 +1,8 @@
-import refdata.DataValue as DV
-import sigfig.createsf as SF
 from pprint import pformat
 from py_expression_eval import Parser
 from jinja2 import Template
+import CHEMBOX.refdata.DataValue as DV
+import CHEMBOX.sigfig.createsf as SF
 
 """
 These are the various data generators for ChemplateUtils.
