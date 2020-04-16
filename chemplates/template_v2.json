@@ -23,7 +23,7 @@
               "reason" : "To be implemented",
         },
         {
-          "value" : "volumemass",
+          "value" : "volume/mass",
                       "units" : "g/mL",
                       "text" : "should be: mass/volume = ({{mass}})/{{volume}} = {{value}}",
                       "correct" : "false",
