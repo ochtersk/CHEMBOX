@@ -1,0 +1,35 @@
+{ "chemplates" :[
+  {"density1": {
+    "questionlist" : [
+    # template with vars, callables(chemformula, chemreaction)
+    # uses template_variables (see below)
+      "What is the density of a sample with mass {{mass}} and volume {{volume}}?",
+    ],
+    "sources" : {
+    # "source_name" : {"function": {"param":value, ... } }, ...
+      "mass" : { "generate" : {"range" : "1-25", "units" : "g" }},
+      "volume" : { "generate" : {"range" : "1-25", "units" : "mL" }},
+      "density" : {"refdata" : {"property": "density"}},
+    },
+    "template_variables" : {
+    # "var_name" : ["source_name","arrtibute"]. ...
+      "mass" : ["mass", "value"],
+      "volume" : ["volume", "value"],
+      "property" : ["density","property"],
+      "chemicalName" : ["density", "chemicalName"],
+      "density" : ["density", "value"],
+    },
+    "answerlist" : [
+    # uses values from template_variables
+      {
+        "value" : { "parse_expression":{ "expression":"mass/density", "vars":"vars"}},
+        "units" : {"copy_text":{"text": "g/mL"}},
+        "text" :  {"fill_template":{ "template":"mass/volume = ({{mass}})/{{volume}} = {{value}}", "vars":"vars"}},
+        "correct" : "true",
+        "reason" : {"copy_text":{"text":"To be implemented"}},
+      }
+    ]
+  }
+}
+]
+}
