@@ -82,7 +82,7 @@ def parse_expression(args,vars):
     result = parser.parse(expression).evaluate(vars)
     return {'value' : result}
 
-def fill_template(template,vars):
+def fill_template(args,vars):
     """fill a template
 
     Parameters
@@ -101,12 +101,14 @@ def fill_template(template,vars):
         if no attribute, value pair or dict is specified.
 
     """
-    verbose = False
+    verbose = True
+    template = args["template"]
+    if verbose: print("template:",pformat(template),"\nvars:",pformat(vars))
     jt = Template(template)
     result = jt.render(vars)
-    return result
+    return {"value":result}
 
-def copy_text(text):
+def copy_text(args):
     """copy and return argument
 
     Parameters
@@ -123,5 +125,7 @@ def copy_text(text):
         if no attribute, value pair or dict is specified.
 
     """
+    verbose = True
+    text = args["text"]
     result = text
-    return result
+    return {"value":result}

@@ -22,11 +22,15 @@
     "answerlist" : [
     # uses values from template_variables
       {
-        "value" : { "parse_expression":{ "expression":"mass/density", "vars":"vars"}},
+        "value" : { "parse_expression":{ "expression":"mass/density", "vars":true}},
         "units" : {"copy_text":{"text": "g/mL"}},
-        "text" :  {"fill_template":{ "template":"mass/volume = ({{mass}})/{{volume}} = {{value}}", "vars":"vars"}},
+        "text" :  {"fill_template":{ "template":"mass/volume = ({{mass}})/{{volume}} = {{value}}", "vars":true}},
         "correct" : "true",
         "reason" : {"copy_text":{"text":"To be implemented"}},
+        #"partials" : [{"parse_expression":{ "expression":"2.00*mass", "vars":true}},
+        #              {"parse_expression":{ "expression":"0.0500*mass", "vars":true}},
+        #             ]
+
       }
     ]
   }

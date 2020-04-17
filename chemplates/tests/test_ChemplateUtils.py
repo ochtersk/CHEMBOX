@@ -89,20 +89,24 @@ def xxtest_assignvals_multisources():
     assert str(vals['vrand1']) == str(DV.DataValue("123.456"))
     assert str(vals['vrand2']) == str(DV.DataValue("123.567"))
 
-answer_template_1 = {
-    "value" : { "parse_expression":{ "expression":"mass/density", "vars":"vars"}},
-    "units" : {"copy_text":{"text": "g/mL"}},
-    "text" :  {"fill_template":{ "template":"mass/volume = ({{mass}})/{{volume}} = {{value}}"}},
-    "correct" : "true",
-    "reason" : {"copy_text":{"text":"To be implemented"}},
-}
 
-ten =  DV.DataValue('10.00 g')
-vars = { 'mass' : ten,
-         'density' : DV.DataValue('2.00 g/mL')
-         }
-answer_template_list1 = [answer_template_1]
-# def test_answer_template_simple():
-#     answerlist=CPU.fillanswerlist(answer_template_list1, vars)
-#     print(answerlist)
-#     assert str(answerlist[0]['value']) == str(DV.DataValue('5.00 mL'))
+def test_answer_template():
+    answer_template_1 = CP.Chemplate(DoD={
+            "value" : { "parse_expression":{ "expression":"mass/density", "use_vals_dict":"true"}},
+            "units" : {"copy_text":{"text": "g/mL"}},
+            "text" :  {"fill_template":{ "template":"mass/volume = ({{mass}})/{{volume}} = {{density}}", "use_vals_dict":"true"}},
+            "correct" : {"copy_text":{"text": "true"}},
+            "reason" : {"copy_text":{"text":"To be implemented"}},        #"partials" : [{"parse_expression":{ "expression":"2.00*mass", "vars":true}},
+        #              {"parse_expression":{ "expression":"0.0500*mass", "vars":true}},
+        #             ]
+        })
+    overrides = CP.Chemplate(DoD= {})
+    ten =  DV.DataValue('10.00 g')
+    vars = { 'mass' : ten,
+             'volume' : DV.DataValue('2.00 mL'),
+             'density': DV.DataValue('5.0000 g/mL')
+             }
+
+
+    filled = CPU.create_Chemplate_from_sources(answer_template_1, overrides, vals_dict=vars)
+    print("ANSWERS:",pformat(filled))

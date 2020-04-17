@@ -29,7 +29,7 @@ def create_Chemplate_from_sources(sources, overrides, vals_dict=None):
                 dictionary of results from the DataGenerator
         Raises
         --------
-        AssertionError if the DataGenerator does not exits in DataGenerators
+        AssertionError if the DataGenerator does not exist in DataGenerators
 
     """
     #make local copies, so there are no accidental changes to the original when we override
@@ -94,15 +94,12 @@ def assignvals(map=None,resultsCP=None):
             valdict[var]=resultsCP.getIDattr(ID,attr)
         return valdict
 
-def fillanswerlist(answer_template_list,vars):
-    """ fillanswerlist - takes a list of answer templates and fills it with
-                         vars, and returns a list of filled answers templates
+def fillansweritem(answer_template_item,vars):
+    """ fillansweritem - takes an answer templates and fills it with
+                         vars, and returns the filled answer template
         Synopsis
         --------
-        answerlist = fillanswerlist(answer_template_list, vars)
-            answer_template_list : a list of answer templates, documented below.
             vars : a dictionary of variables to fill in and their associated values.
-            answerlist = a list of filled answer_templates
             answer_template: an answer_template is a dictionary with the following
                          keys (those currently used have asterisks. The others
                          are currently ignored):
@@ -115,23 +112,18 @@ def fillanswerlist(answer_template_list,vars):
                 'partials' : intermediate values in calulations
         Example answer_template:
         answer_template_1 = {
-            'value' : 'mass/density',
-            'units' : 'mL',
-            'text' : 'mass/density = ({{mass}})/{{density}} = {{value}}',
-            'correct' : True,
-            'reason' : 'To be implemented',
-            'partials' : {'partial1' : '2.0000*mass',
-                          'partial2' : '0.50000*mass'
-                         }
+            "value" : { "parse_expression":{ "expression":"mass/density", "use_vals_dict":true}},
+            "units" : {"copy_text":{"text": "g/mL"}},
+            "text" :  {"fill_template":{ "template":"mass/volume = ({{mass}})/{{volume}} = {{value}}", "use_vals_dict":true}},
+            "correct" : "true",
+            "reason" : {"copy_text":{"text":"To be implemented"}},
+            #'partials' : [{"parse_expression":{ "expression":"2.00*mass", "use_vals_dict":"rue"}},
+            #              {{"parse_expression":{ "expression":"0.0500*mass", "use_vals_dict":"true"}},}
+            #             ]
         }
         Raises
         --------
         AssertionError
 
     """
-    answer_list =[]
-    for template in answer_template_list:
-        pass
-
-        answer_list.append(filled)
-    return answer_list
+    filled_template = create_Chemplate_from_sources(answer_template, None, vals_dict=vars)

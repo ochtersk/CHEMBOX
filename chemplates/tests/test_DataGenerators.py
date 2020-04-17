@@ -64,15 +64,15 @@ def test_parser(expression, vars, answer ):
     ("1+{{a}}",{"a" : "1"}, "1+1" ),
 ])
 def test_fill_template(template, vars, answer ):
-    x = DG.fill_template(template, vars)
+    x = DG.fill_template({"template":template}, vars)
     print("test_fill_template x:",pformat(x))
-    assert str(x) == str(answer)
+    assert str(x["value"]) == str(answer)
 
 @pytest.mark.parametrize("text, answer", [
     ("1+2", "1+2" ),
     ("dog cat chicken", "dog cat chicken" ),
 ])
 def test_copy_text(text, answer ):
-    x = DG.copy_text(text)
+    x = DG.copy_text({"text":text})
     print("test_copy_text x:",pformat(x))
-    assert str(x) == str(answer)
+    assert str(x["value"]) == str(answer)
