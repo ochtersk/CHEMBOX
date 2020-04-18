@@ -36,6 +36,29 @@ def test_Chemplate_init_fail_TypeError():
 
 x = CP.Chemplate()
 y = CP.Chemplate()
+@pytest.mark.parametrize("ID, attribute,answerID,answerattr", [
+     # add 1 attribute
+     ("a","a1",True,True),
+     ("a","a2",True,True),
+     ("a","a3",True,False),
+])
+def test_Chemplate_existsID(ID,attribute,answerID,answerattr):
+    x = CP.Chemplate(DoD=DoD)
+    tval = x.existsID(ID=ID)
+    assert tval == answerID
+    tval2 = x.existsIDattr(ID=ID, attribute=attribute)
+    assert tval2 == answerattr
+
+@pytest.mark.parametrize("ID, attribute,answerID,answerattr", [
+     # add 1 attribute
+     ("c","c",False,False),
+])
+def test_Chemplate_existsID_not(ID,attribute,answerID,answerattr):
+    with pytest.raises(KeyError):
+        tval2 = x.existsIDattr(ID=ID, attribute=attribute)
+
+x = CP.Chemplate()
+y = CP.Chemplate()
 @pytest.mark.parametrize("ID, attribute,value,answer", [
      # add 1 attribute
      ("Test","Attr1","seven","{'Test': {'Attr1': 'seven'}}"),

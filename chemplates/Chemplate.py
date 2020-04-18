@@ -203,3 +203,43 @@ class Chemplate():
 
         """
         return self.data[ID].pop(attribute)
+
+    def existsIDattr(self,ID=None,attribute=None):
+        """check if a Chemplate ID's attribute value exists
+
+        Parameters
+        ----------
+        ID : str (required)
+        the ID in the specified Chemplate to remove the attribute from
+        attribute : str (required)
+        which attribute to check for existance in ID
+
+        Returns
+        -------
+        the True if ID's attribute exists
+
+        Raises
+        ------
+        KeyError if ID doesn't exist
+
+        """
+        return attribute in self.data[ID]
+
+    def existsID(self,ID=None):
+        """check if a Chemplate ID exists
+
+        Parameters
+        ----------
+        ID : str (required)
+        the ID in the specified Chemplate to check
+
+        Returns
+        -------
+        the True if the ID exists in self.data
+
+        Raises
+        ------
+        None
+
+        """
+        return ID in self.data
