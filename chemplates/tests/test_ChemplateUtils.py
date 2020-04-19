@@ -68,7 +68,7 @@ def test_create_Chemplate_from_sources_with_overrides2():
 
 def test_create_Chemplate_from_sources_with_valsdict():
     source = CP.Chemplate(DoD={ "expr":{"parse_expression":{ "expression":"mass/density",
-            "use_vals_dict": "true"}
+            "use_values": "true"}
             }})
     overrides = CP.Chemplate(DoD= {})
     valsdict = {"mass": 5.0, "density": 10.0}
@@ -91,22 +91,32 @@ def xxtest_assignvals_multisources():
 
 
 def test_answer_template():
+    source = CP.Chemplate(DoD={"rand1" :{'random_value' :{'type' : 'exact', 'exact' : '12.02'}},
+                               "rand2" :{'random_value' :{'type' : 'exact', 'exact' : '6.01'}}})
+    overrides = CP.Chemplate(DoD= {})
+    var = CPU.create_Chemplate_from_sources(source,overrides)
     answer_template_1 = CP.Chemplate(DoD={
-            "value" : { "parse_expression":{ "expression":"mass/density", "use_vals_dict":"true"}},
+            "value" : { "parse_expression":{ "expression":"mass/density", "use_values":"true"}},
             "units" : {"copy_text":{"text": "g/mL"}},
-            "text" :  {"fill_template":{ "template":"mass/volume = ({{mass}})/{{volume}} = {{density}}", "use_vals_dict":"true"}},
+            "text" :  {"fill_template":{ "template":"mass/volume = ({{mass}})/{{volume}} = {{density}}", "use_values":"true"}},
+            "text2" :  {"fill_template":{ "template":"mag units = {{property.magnitude}} {{property['units']}}", "use_values":"true"}},
+            "text3" :  {"fill_template":{ "template":"density = {{mass/volume}}", "use_values":"true"}},
+            "text4" :  {"fill_template":{ "template":"two = {{rand1.value/rand2.value}}", "use_values":"true"}},
             "correct" : {"copy_text":{"text": "true"}},
             "reason" : {"copy_text":{"text":"To be implemented"}},        #"partials" : [{"parse_expression":{ "expression":"2.00*mass", "vars":true}},
         #              {"parse_expression":{ "expression":"0.0500*mass", "vars":true}},
         #             ]
         })
+    print("SOURCE:",pformat(var))
     overrides = CP.Chemplate(DoD= {})
     ten =  DV.DataValue('10.00 g')
     vars = { 'mass' : ten,
              'volume' : DV.DataValue('2.00 mL'),
-             'density': DV.DataValue('5.0000 g/mL')
+             'density': DV.DataValue('5.0000 g/mL'),
+             'property':{"magnitude":7.777, "units":"km/hr"}
              }
+    vars.update([("rand1",var.getID("rand1")),("rand2",var.getID("rand2"))])
 
-
-    filled = CPU.create_Chemplate_from_sources(answer_template_1, overrides, vals_dict=vars)
+    filled = CPU.create_Chemplate_from_sources(answer_template_1, overrides, values=vars)
+    print("TEMPLATE:",pformat(answer_template_1))
     print("ANSWERS:",pformat(filled))

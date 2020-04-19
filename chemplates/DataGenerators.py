@@ -101,7 +101,7 @@ def fill_template(args,vars):
         if no attribute, value pair or dict is specified.
 
     """
-    verbose = True
+    verbose = False
     template = args["template"]
     if verbose: print("template:",pformat(template),"\nvars:",pformat(vars))
     jt = Template(template)
@@ -125,7 +125,7 @@ def copy_text(args):
         if no attribute, value pair or dict is specified.
 
     """
-    verbose = True
+    verbose = False
     text = args["text"]
     result = text
     return {"value":result}

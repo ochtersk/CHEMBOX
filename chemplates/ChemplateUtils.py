@@ -7,22 +7,22 @@ import CHEMBOX.chemplates.DataGenerators as DG
 """ These are functions that do utility work using Chemplates.
 """
 
-def create_Chemplate_from_sources(sources, overrides, vals_dict=None):
+def create_Chemplate_from_sources(sources, overrides, values=None):
     """ create_Chemplate_from_sources - create a Chemplate (var) with
               information from given sources and overrides
 
 
         Synopsis
         --------
-        var = create_Chemplate_from_sources(sources, overrides, vals_dict)
+        var = create_Chemplate_from_sources(sources, overrides, values)
             sources : a ChemPlate with variable names as keys and
                 a dictionary with DataGenerators as keys and arguments for
                 the DataGenerator as values
             overrides : similar to sources, but values in this dictionary replace
                 those in sources with matching keys, allowing for override of
                 default values in sources.
-            vals_dict : a dictionary of values that get passed into generators that
-                need information other than from sources (if use_vals_dict == True)
+            values : a Chemplate or a dictionary of values that get passed into generators that
+                need information other than from sources (if use_values == True)
             var : a Chemplate, which is a Python dictionary of dictionaries.
                 Each key is a the variable name and the value is a dictionary
                 with the DataGenerator name as a key and the value is a
@@ -33,13 +33,17 @@ def create_Chemplate_from_sources(sources, overrides, vals_dict=None):
 
     """
     #make local copies, so there are no accidental changes to the original when we override
-    verbose = True
-    if vals_dict is None:
-        vals_dict = {}
+    verbose = False
+    if values is None:
+        values = {}
+    elif isinstance(values,CP.Chemplate):
+        values = values.asdict()
+    else:
+        assert isinstance(values,dict) ,"create_Chemplate_from_sources: values parameter must be Chemplate or dict"
     if verbose: print()
     if verbose: print("sources:",pformat(sources))
     if verbose: print("overrides:",pformat(overrides))
-    if verbose: print("vals_dict:",pformat(vals_dict))
+    if verbose: print("values:",pformat(values))
     locSrc = copy.deepcopy(sources)
     locSrc.updateWith(overrides)
     locVar=CP.Chemplate()
@@ -51,8 +55,8 @@ def create_Chemplate_from_sources(sources, overrides, vals_dict=None):
         assert isinstance(gen, dict)
         for (generator, args) in gen.items():
             assert isinstance(args,dict),"create_Chemplate_from_sources:Datagenerator args must be dict"
-            if "use_vals_dict" in args and args["use_vals_dict"]== "true":
-                res = _dispatch(generator, args, vals_dict )
+            if "use_values" in args and args["use_values"]== "true":
+                res = _dispatch(generator, args, values )
             else:
                 res = _dispatch(generator, args)
             locVar.setID(ID=id, dict=res)
@@ -112,13 +116,13 @@ def fillansweritem(answer_template_item,vars):
                 'partials' : intermediate values in calulations
         Example answer_template:
         answer_template_1 = {
-            "value" : { "parse_expression":{ "expression":"mass/density", "use_vals_dict":true}},
+            "value" : { "parse_expression":{ "expression":"mass/density", "use_values":true}},
             "units" : {"copy_text":{"text": "g/mL"}},
-            "text" :  {"fill_template":{ "template":"mass/volume = ({{mass}})/{{volume}} = {{value}}", "use_vals_dict":true}},
+            "text" :  {"fill_template":{ "template":"mass/volume = ({{mass}})/{{volume}} = {{value}}", "use_values":true}},
             "correct" : "true",
             "reason" : {"copy_text":{"text":"To be implemented"}},
-            #'partials' : [{"parse_expression":{ "expression":"2.00*mass", "use_vals_dict":"rue"}},
-            #              {{"parse_expression":{ "expression":"0.0500*mass", "use_vals_dict":"true"}},}
+            #'partials' : [{"parse_expression":{ "expression":"2.00*mass", "use_values":"rue"}},
+            #              {{"parse_expression":{ "expression":"0.0500*mass", "use_values":"true"}},}
             #             ]
         }
         Raises
@@ -126,4 +130,4 @@ def fillansweritem(answer_template_item,vars):
         AssertionError
 
     """
-    filled_template = create_Chemplate_from_sources(answer_template, None, vals_dict=vars)
+    filled_template = create_Chemplate_from_sources(answer_template, None, values=vars)

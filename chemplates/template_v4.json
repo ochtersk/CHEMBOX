@@ -1,0 +1,42 @@
+# template version 4
+#   removed temaplte vars - looks like Jinja2 make that unnecessary
+#   question list now uses chemplates  - make things simpler
+# entries will be processed in the order sources, questionlist, answerlist
+{ "chemplates" :[
+  {"density1": {
+    "sources" : {
+    # "source_name" : {"function": {"param":value, ... } }, ...
+      "mass" : { "generate" : {"range" : "1-25", "units" : "g" }},
+      "volume" : { "generate" : {"range" : "1-25", "units" : "mL" }},
+      "density" : {"refdata" : {"property": "density"}},
+    },
+    "questionlist" : [
+    # template with vars, callables(chemformula, chemreaction)
+    # uses template_variables (see below)
+      {"fill_template":{ "template":"What is the density of a sample with mass {{mass}} and volume {{volume}}?", "use_vals_dict":"true"}},
+    ],
+
+    "answerlist" : [
+    # uses values from sources
+    #answer_template: an answer_template is a dictionary with the following
+    #             keys (those currently used have asterisks. The others
+    #             are currently ignored):
+    #    'value' : the equation to get the answer, which is parsed and evaluated
+    #    'units' : units desired for the answer
+    #    'text' : text to be rendered as a jinja2 template. It could explain
+    #              the answer with variable values filled in
+    #    'correct' : a boolean flag tell in this answer is correct.
+      {
+        "value" : { "parse_expression":{ "expression":"mass/density", "use_vals_dict":"true"}},
+        "units" : {"copy_text":{"text": "g/mL"}},
+        "text" :  {"fill_template":{ "template":"mass/volume = ({{mass}})/{{volume}} = {{density}}", "use_vals_dict":"true"}},
+        "text2" :  {"fill_template":{ "template":"mag units = {{property.magnitude}} {{property['units']}}", "use_vals_dict":"true"}},
+        "text3" :  {"fill_template":{ "template":"density = {{mass/volume}}", "use_vals_dict":"true"}},
+        "text4" :  {"fill_template":{ "template":"density = {{mass1.value/volume1.value}}", "use_vals_dict":"true"}},
+        "correct" : {"copy_text":{"text": "true"}},
+      }
+    ]
+  }
+}
+]
+}
