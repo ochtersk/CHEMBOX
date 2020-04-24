@@ -1,4 +1,6 @@
 from pprint import pformat
+import json
+import CHEMBOX.refdata.DataValue as DV
 class Chemplate():
     """Chemplate class for ChemBox to manipulate information in Chemplates
     (chemistry question templates). It's basically like a library of Python
@@ -243,3 +245,35 @@ class Chemplate():
 
         """
         return ID in self.data
+
+    def asdict(self):
+        """return chemplate data as a dict
+
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        chemplate data
+
+        Raises
+        ------
+        None
+
+        """
+        return self.data
+
+    def equalTo(self,other):
+        for key in self.getIDs():
+            if isinstance(self.getIDattr(key,'value'),str):
+                filled_val = json.dumps(self.getID(key), sort_keys=True)
+                correct_val = json.dumps(other.getID(key), sort_keys=True)
+                assert filled_val == correct_val, f"filled {key} not equal to correct item ({filled_val}, {correct_val})"
+            elif isinstance(self.getIDattr(key,'value'),DV.DataValue):
+                filled_val = str(self.getIDattr(key,'value'))
+                correct_val = str(other.getIDattr(key,'value'))
+                assert filled_val == correct_val, f"filled {key} not equal to correct item ({filled_val}, {correct_val})"
+        return True
+            #print("TEMPLATE:",pformat(answer_template_1))
+            #print("ANSWERS:",pformat(filled))

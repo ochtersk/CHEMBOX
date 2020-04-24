@@ -7,7 +7,7 @@ import CHEMBOX.chemplates.DataGenerators as DG
 """ These are functions that do utility work using Chemplates.
 """
 
-def create_Chemplate_from_sources(sources, overrides, values=None):
+def create_Chemplate_from_sources(sources, overrides=None, values=None):
     """ create_Chemplate_from_sources - create a Chemplate (var) with
               information from given sources and overrides
 
@@ -40,6 +40,8 @@ def create_Chemplate_from_sources(sources, overrides, values=None):
         values = values.asdict()
     else:
         assert isinstance(values,dict) ,"create_Chemplate_from_sources: values parameter must be Chemplate or dict"
+    if overrides is None:
+        overrides = CP.Chemplate(DoD= {})
     if verbose: print()
     if verbose: print("sources:",pformat(sources))
     if verbose: print("overrides:",pformat(overrides))
@@ -74,60 +76,3 @@ def _dispatch(generator, config, *args):
     else:
         result = func(config,*args)
     return result
-
-def assignvals(map=None,resultsCP=None):
-        """ assignvals - remap the results of fillvars to a dictionary where the
-                         keys are variable names and the values are values from
-                         the DataGenerator
-            Synopsis
-            --------
-            vals = assignvals(map=map, results=results)
-                map : a dictionary with variable names as keys, and a list of ID,attr pairs
-                      to get the information from a Chemplate
-                results : a Chemplate from fillvars that has the results stored in it
-            Raises
-            --------
-            AssertionError
-
-        """
-        verbose = False
-        valdict={}
-        for var in map:
-            (ID,attr)=map[var]
-            if verbose: print("var:",var,"ID:",ID,"attr:",attr)
-            valdict[var]=resultsCP.getIDattr(ID,attr)
-        return valdict
-
-def fillansweritem(answer_template_item,vars):
-    """ fillansweritem - takes an answer templates and fills it with
-                         vars, and returns the filled answer template
-        Synopsis
-        --------
-            vars : a dictionary of variables to fill in and their associated values.
-            answer_template: an answer_template is a dictionary with the following
-                         keys (those currently used have asterisks. The others
-                         are currently ignored):
-                'value'* : the equation to get the answer, which is parsed and evaluated
-                'units' : units desired for the answer
-                'text'* : text to be rendered as a jinja2 template. It could explain
-                          the answer with variable values filled in
-                'correct' : a boolean flag tell in this answer is correct.
-                'reason' : A text reason explaining answers,
-                'partials' : intermediate values in calulations
-        Example answer_template:
-        answer_template_1 = {
-            "value" : { "parse_expression":{ "expression":"mass/density", "use_values":true}},
-            "units" : {"copy_text":{"text": "g/mL"}},
-            "text" :  {"fill_template":{ "template":"mass/volume = ({{mass}})/{{volume}} = {{value}}", "use_values":true}},
-            "correct" : "true",
-            "reason" : {"copy_text":{"text":"To be implemented"}},
-            #'partials' : [{"parse_expression":{ "expression":"2.00*mass", "use_values":"rue"}},
-            #              {{"parse_expression":{ "expression":"0.0500*mass", "use_values":"true"}},}
-            #             ]
-        }
-        Raises
-        --------
-        AssertionError
-
-    """
-    filled_template = create_Chemplate_from_sources(answer_template, None, values=vars)

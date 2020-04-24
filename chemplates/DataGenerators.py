@@ -13,7 +13,7 @@ def random_value(repl=None):
 
     Parameters
     ----------
-    replace : dictionary
+    repl : dictionary
         a dictionary containing any defaults which shoud be replaced/updated.
 
     Returns
