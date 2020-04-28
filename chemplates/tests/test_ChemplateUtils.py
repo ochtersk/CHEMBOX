@@ -126,4 +126,4 @@ def test_answer_template():
 
     filled = CPU.create_Chemplate_from_sources(answer_template_1, overrides, values=vars)
     print("ANSWERS:",pformat(filled))
-    assert filled.equalTo(correct_CP)
+    assert filled.assertEqualTo(correct_CP)

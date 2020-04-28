@@ -264,16 +264,36 @@ class Chemplate():
         """
         return self.data
 
-    def equalTo(self,other):
-        for key in self.getIDs():
-            if isinstance(self.getIDattr(key,'value'),str):
-                filled_val = json.dumps(self.getID(key), sort_keys=True)
-                correct_val = json.dumps(other.getID(key), sort_keys=True)
-                assert filled_val == correct_val, f"filled {key} not equal to correct item ({filled_val}, {correct_val})"
-            elif isinstance(self.getIDattr(key,'value'),DV.DataValue):
-                filled_val = str(self.getIDattr(key,'value'))
-                correct_val = str(other.getIDattr(key,'value'))
-                assert filled_val == correct_val, f"filled {key} not equal to correct item ({filled_val}, {correct_val})"
+    def assertEqualTo(self,other):
+        """compare two chemplates for equality, raise exception if they're not
+
+        Parameters
+        ----------
+        other - the other chemplate to compare to
+
+        Returns
+        -------
+        true if both chemplate are equivalent
+
+        Raises
+        ------
+        Key error fit the keys are different at the top level
+
+        """
+        assert isinstance(other, Chemplate), "argument to assertEqualTo must be a CP.Chemplate"
+        self_keys = self.getIDs()
+        other_keys = other.getIDs()
+        different_keys = self_keys - other_keys
+        assert len(different_keys)==0, f"different keys:{' '.join(different_keys)}"
+        for key in self_keys:
+            self_item = self.getID(key)
+            other_item = other.getID(key)
+            different_keys = self_item.keys() - other_item.keys()
+            assert len(different_keys)==0, f"different keys:{' '.join(different_keys)}"
+            for innerkey in self_item.keys():
+                self_val = self.getIDattr(key,innerkey)
+                other_val = self.getIDattr(key,innerkey)
+                assert self_val == other_val, f"key{key}.innerkey{innerkey} not equal ({self_val}, {other_val})"
         return True
             #print("TEMPLATE:",pformat(answer_template_1))
             #print("ANSWERS:",pformat(filled))
