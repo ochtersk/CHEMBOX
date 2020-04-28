@@ -144,3 +144,29 @@ def test_Chemplate_delIDattr():
         fail = x.delIDattr(ID="c",attribute="b1")
     with pytest.raises(KeyError):
         fail = x.delIDattr(ID="b",attribute="bx")
+
+def test_Chemplate_assertEqualTo():
+    x1 = CP.Chemplate(DoD=DoD)
+    x2 = CP.Chemplate(DoD=DoD)
+    assert x1.assertEqualTo(x2)
+    alteredDoD = copy.deepcopy(DoD)
+    #alteredDoD["b"].pop("b1")
+    alteredDoD.pop("b")
+    x2 = CP.Chemplate(DoD=alteredDoD)
+    with pytest.raises(AssertionError, match="different primary keys"):
+        fail = x1.assertEqualTo(x2)
+
+    alteredDoD = copy.deepcopy(DoD)
+    alteredDoD["b"].pop("b1")
+    x2 = CP.Chemplate(DoD=alteredDoD)
+    with pytest.raises(AssertionError, match="different secondary keys"):
+        fail = x1.assertEqualTo(x2)
+
+    alteredDoD = copy.deepcopy(DoD)
+    alteredDoD["b"]["b1"]="xxx"
+    x2 = CP.Chemplate(DoD=alteredDoD)
+    with pytest.raises(AssertionError, match="different values for key"):
+        fail = x1.assertEqualTo(x2)
+
+    with pytest.raises(AssertionError, match="argument"):
+        fail = x1.assertEqualTo(DoD)

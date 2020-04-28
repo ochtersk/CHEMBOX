@@ -277,23 +277,26 @@ class Chemplate():
 
         Raises
         ------
-        Key error fit the keys are different at the top level
+        AssertionError: different primary keys
+        AssertionError: different secondary keys
+        AssertionError: different values
 
         """
         assert isinstance(other, Chemplate), "argument to assertEqualTo must be a CP.Chemplate"
         self_keys = self.getIDs()
         other_keys = other.getIDs()
         different_keys = self_keys - other_keys
-        assert len(different_keys)==0, f"different keys:{' '.join(different_keys)}"
+        assert len(different_keys)==0, f"different primary keys:{' '.join(different_keys)}"
         for key in self_keys:
             self_item = self.getID(key)
             other_item = other.getID(key)
             different_keys = self_item.keys() - other_item.keys()
-            assert len(different_keys)==0, f"different keys:{' '.join(different_keys)}"
+            assert len(different_keys)==0, f"different secondary keys:{' '.join(different_keys)}"
             for innerkey in self_item.keys():
                 self_val = self.getIDattr(key,innerkey)
-                other_val = self.getIDattr(key,innerkey)
-                assert self_val == other_val, f"key{key}.innerkey{innerkey} not equal ({self_val}, {other_val})"
+                other_val = other.getIDattr(key,innerkey)
+                print(f"for {key},{innerkey} self_val:{self_val}  other_val:{other_val}")
+                assert self_val == other_val, f"different values for key{key}.innerkey{innerkey}: ({self_val}, {other_val})"
         return True
             #print("TEMPLATE:",pformat(answer_template_1))
             #print("ANSWERS:",pformat(filled))
