@@ -170,3 +170,23 @@ def test_Chemplate_assertEqualTo():
 
     with pytest.raises(AssertionError, match="argument"):
         fail = x1.assertEqualTo(DoD)
+
+def test_Chemplate_getIDvalue():
+    DoD = { "a":
+            {
+            "value" : "7",
+            },
+            "hasnovalue":
+            {
+            "b1" : "7",
+            "b2" : "dog"
+            },
+          }
+
+    x = CP.Chemplate(DoD=DoD)
+    a = x.getIDvalue(ID="a")
+    assert pformat(a) == pformat(DoD["a"]["value"])
+    with pytest.raises(KeyError):
+        fail = x.getIDvalue(ID="c")
+    with pytest.raises(KeyError):
+        fail = x.getIDvalue(ID="b")

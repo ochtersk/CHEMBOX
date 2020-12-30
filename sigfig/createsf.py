@@ -351,6 +351,7 @@ class SciSigFig:
         if nsf_range is None:
             nsf_range = [3,5]
         nsf = randint(*nsf_range)
+        #print("low:",low," high:", high, "magnitude:", magnitude)
         new = SciSigFig(str(magnitude))
         new.round_numdig(nsf)
         return new

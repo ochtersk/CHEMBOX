@@ -1,0 +1,14 @@
+{% extends "content1.html" %}
+{% block title %} Multi QandA OLA{% endblock %}
+{% block qanda %}
+
+{% for i in results %}
+<b>{{loop.index0 +1 }}. </b> {{i.question}}
+<br>
+<ol type="a">
+{% for anwser in i.answers %}
+  <li>{{ i.answers[loop.index0] }} </li>
+{% endfor %}
+</ol>
+{% endfor %}
+{% endblock %}

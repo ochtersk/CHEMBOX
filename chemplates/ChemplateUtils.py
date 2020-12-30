@@ -34,12 +34,15 @@ def create_Chemplate_from_sources(sources, overrides=None, values=None):
     """
     #make local copies, so there are no accidental changes to the original when we override
     verbose = False
+    temp=CP.Chemplate(DoD={})
+    if verbose: print("\nSOURCES:",sources,"\nOVER:",overrides,"\nVALt:",type(values))
     if values is None:
         values = {}
     elif isinstance(values,CP.Chemplate):
         values = values.asdict()
     else:
         assert isinstance(values,dict) ,"create_Chemplate_from_sources: values parameter must be Chemplate or dict"
+
     if overrides is None:
         overrides = CP.Chemplate(DoD= {})
     if verbose: print()
@@ -56,9 +59,11 @@ def create_Chemplate_from_sources(sources, overrides=None, values=None):
         if verbose: print("gen:",type(gen),"  -->",pformat(gen))
         assert isinstance(gen, dict)
         for (generator, args) in gen.items():
+            if verbose: print("args:",type(args),"  -->",pformat(args))
             assert isinstance(args,dict),"create_Chemplate_from_sources:Datagenerator args must be dict"
             if "use_values" in args and args["use_values"]== "true":
-                res = _dispatch(generator, args, values )
+                args.update({"vars":values})
+                res = _dispatch(generator, args)
             else:
                 res = _dispatch(generator, args)
             locVar.setID(ID=id, dict=res)

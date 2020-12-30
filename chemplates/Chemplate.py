@@ -1,6 +1,5 @@
 from pprint import pformat
-import json
-import CHEMBOX.refdata.DataValue as DV
+
 class Chemplate():
     """Chemplate class for ChemBox to manipulate information in Chemplates
     (chemistry question templates). It's basically like a library of Python
@@ -295,8 +294,31 @@ class Chemplate():
             for innerkey in self_item.keys():
                 self_val = self.getIDattr(key,innerkey)
                 other_val = other.getIDattr(key,innerkey)
-                print(f"for {key},{innerkey} self_val:{self_val}  other_val:{other_val}")
-                assert self_val == other_val, f"different values for key{key}.innerkey{innerkey}: ({self_val}, {other_val})"
+                #print(f"for {key},{innerkey} self_val:{self_val}  other_val:{other_val}")
+                assert str(self_val) == str(other_val),f"different values for key:{key} innerkey:{innerkey}: ({self_val}, {other_val})"
         return True
             #print("TEMPLATE:",pformat(answer_template_1))
             #print("ANSWERS:",pformat(filled))
+
+    def getIDvalue(self,ID=None):
+        """get the value of a Chemplate ID's "value" attribute
+        this is a shortcut method for getIDattr where ID is given and attr is "value"
+
+
+        Parameters
+        ----------
+        ID: str (required)
+        a string indicating which ID should be used to choose the dictionary.
+
+
+        Returns
+        -------
+        the contents of the "value" attribute in dictionary ID
+
+        Raises
+        ------
+        KeyError
+            if the ID or "value" attribute doesn't exist
+
+        """
+        return self.data[ID]["value"]

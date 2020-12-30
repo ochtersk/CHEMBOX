@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+    <title>{% block title %}{% endblock %} - Rockfall Forge</title>
+    {% endblock %}
+</head>
+<body>
+    <div id="content">{% block qanda %}{% endblock %}</div>
+    <div id="footer">
+        {% block footer %}
+        &copy; Copyright 2020 by <a href="docochsbox.com">Rockfall Forge</a>.
+        {% endblock %}
+    </div>
+</body>
+</html>

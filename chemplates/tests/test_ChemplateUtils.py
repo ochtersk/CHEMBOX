@@ -125,5 +125,5 @@ def test_answer_template():
     vars.update([("rand1",var.getID("rand1")),("rand2",var.getID("rand2"))])
 
     filled = CPU.create_Chemplate_from_sources(answer_template_1, overrides, values=vars)
-    print("ANSWERS:",pformat(filled))
+    #print("ANSWERS:",pformat(filled))
     assert filled.assertEqualTo(correct_CP)

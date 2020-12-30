@@ -256,3 +256,13 @@ def test_approximate_magnitude_range(low,high,nsf_range):
         assert aa.sfcount >= 3 and aa.sfcount <= 5
     else:
         assert aa.sfcount == nsf_range[0]
+
+def test_range_distrib():
+    sum = SciSigFig("0.0")
+    low = 1.0
+    high = 2.0
+    nsf_range = [6,6]
+    for x in range(0, 3):
+        aa = SciSigFig.in_range(low=low,high=high,nsf_range=nsf_range)
+        sum += aa
+    print("avg:", sum/SciSigFig("3.000"))

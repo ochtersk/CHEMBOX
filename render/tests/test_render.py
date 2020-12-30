@@ -28,13 +28,16 @@ def test_simple_render():
     #print("ANS TEXT:",text)
     assert str(text) == "2.00 g/mL"
 
+
+
+
 @pytest.mark.parametrize("print_list,rt_answer, wr_answer", [
     ([], "2.00 mL", "2.00 g/mL"),
     (["text"],  "2.00 mL mass/volume = (10.00 g)/2.00 mL = 5.0000 g/mL", "2.00 g/mL mass/volume = (10.00 g)/2.00 mL = 5.0000 g/mL"),
 ])
 def test_printlist_render(print_list,rt_answer, wr_answer):
     text = Render.render_item(answer_item[0],print_list)
-    #print("rANS print_list TEXT:",text)
+    #print("\nrANS print_list TEXT:",text)
     assert str(text) == rt_answer
     text = Render.render_item(answer_item[1],print_list)
     #print("wANS print_list TEXT:",text)
