@@ -58,7 +58,7 @@ def process_chemplate(template):
     for answer in answerlist:
         answerCP=CP.Chemplate(DoD=answer)
         answerval=CPU.create_Chemplate_from_sources(answerCP,None,src_vals)
-        answertext = Render.render_item(answerval)
+        answertext = Render.render_item_to_string(answerval)
         if Render.is_correct(answerval):
             answer_results.insert(0,correcttag+ answertext)
         else:

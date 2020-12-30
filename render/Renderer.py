@@ -12,8 +12,8 @@ def is_correct(target_item):
     else:
         return False
 
-def render_item(target_item, print_list=None):
-    """ render_item(target_item, print_list) renders and returns a string
+def render_item_to_string(target_item, print_list=None):
+    """ render_item_to_string(target_item, print_list) renders and returns a string
             representation of a Chemplate answer.
             If the answer is incorrect, it forcres the units to be those given
             in the Chemplate
