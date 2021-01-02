@@ -66,6 +66,7 @@ def _gettoken(c,chars,knownsigils):
 
 
 def post_process(text):
+    # XXX update to spit out HTML - no need for requests GDocs can take html 
     """ post_process(text,output_target) post processes text strings and returns
             a list of formatiing requests as tuples
             Formating sigils:

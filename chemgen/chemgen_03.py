@@ -1,5 +1,6 @@
 from jinja2 import Environment, PackageLoader, select_autoescape
 import commentjson
+from pprint import pformat
 import sys
 
 #print(__name__)
@@ -25,7 +26,7 @@ for n in range(3):
     reslist.append(results_dict)
 
 
-
+#print(pformat(results_dict))
 template = env.get_template('mqanda_ol.html')
 text = template.render(results = reslist)
 print(text)

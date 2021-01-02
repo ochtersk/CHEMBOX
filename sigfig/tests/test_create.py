@@ -235,27 +235,44 @@ def test_approximate_magnitude(target, pct):
     assert error <= pct/100
 
 @pytest.mark.parametrize("low,high,nsf_range",[
-(0.01,10,None),
-(100,115,None),
-(-212,-201,None),
-(0,1,None),
-(0.01,.011,None),
-(0.01,10,[6,6]),
-(100,115,[6,6]),
-(-212,-201,[3,3]),
-(-201,-200,[3,3]),
-(0,1,[4,4]),
-(0.01,.011,[4,4]),
+("0.01","10",None),
+("100","115",None),
+("-212","-201",None),
+("0","1",None),
+("0.01",".011",None),
+("0.01","10",[6,6]),
+("100","115",[6,6]),
+("-212","-201",[3,3]),
+("-201","-200",[3,3]),
+("0","1",[4,4]),
+("0.01",".011",[4,4]),
 ])
 def test_approximate_magnitude_range(low,high,nsf_range):
     aa = SciSigFig.in_range(low=low,high=high,nsf_range=nsf_range)
-    #print("low:",low, " aa:",aa.number," high:",high," nsf:",str(nsf_range))
+    print("low:",low, " aa:",aa.number," high:",high," nsf:",str(nsf_range),"REPR:",repr(aa))
 
-    assert aa.number >= Decimal(low) and aa.number <= Decimal(high)
+    assert aa.number >= Decimal(low)
+    assert aa.number <= Decimal(high)
     if nsf_range is None:
         assert aa.sfcount >= 3 and aa.sfcount <= 5
     else:
         assert aa.sfcount == nsf_range[0]
+
+
+@pytest.mark.parametrize("aa",[
+(SciSigFig("3.02e-2",notation="scientific")),
+(SciSigFig("1.88e2",notation="scientific")),
+(SciSigFig("-0.2")),
+(SciSigFig("0.1")),
+(SciSigFig("100.0001")),
+(SciSigFig("0.01")),
+])
+def test_repr(aa):
+    #print("aa:",str(aa),"\n",aa.dump())
+    astring = repr(aa)
+    bb = eval(astring)
+    #print("bb:",str(bb),"\n",bb.dump())
+    assert aa.dump() == bb.dump()
 
 def test_range_distrib():
     sum = SciSigFig("0.0")

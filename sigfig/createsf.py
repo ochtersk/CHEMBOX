@@ -85,7 +85,11 @@ class SciSigFig:
         }
     # these are any predefined constant we'd like to use they are assumed to
     # be exact
-    def __init__(self,numstring, notation="normal", exact=False):
+    def __init__(*args,**kwargs):
+        self=args[0]
+        numstring = args[1]
+        notation = kwargs["notation"] if "notation" in kwargs else "normal"
+        exact=kwargs["exact"] if "exact" in kwargs else False
         if numstring in SciSigFig.defined_constants.keys():
             numstring = SciSigFig.defined_constants[numstring]
             exact = True
@@ -111,8 +115,12 @@ class SciSigFig:
         return float(self.number)
 
     def __repr__(self):
-        numstr = str(self.number)
-        return ' number:%s\n str(number):%s\n      sfcode:%s\n        sfid:%s\n     sfcount:%s\n        uexp:%s\n    notation:%s' % \
+        numstr = str(self)
+        return 'SciSigFig("%s", notation="%s")' % (numstr, self.notation)
+
+    def dump(self):
+        numstr = str(self)
+        return '  xxxnumber:%s\n str(number):%s\n      sfcode:%s\n        sfid:%s\n     sfcount:%s\n        uexp:%s\n    notation:%s' % \
             (self.number,numstr, self.sfcode,self.sfid,self.sfcount,self.uexp,self.notation)
 
     def __str__(self):
@@ -129,7 +137,7 @@ class SciSigFig:
         if notation == 'scientific':
             if nsf>0:
                 format_str = "{:."+str(nsf-1)+"e}"
-                #print("__str__ format:",format_str)
+                if verbose: print("__str__ format:",format_str)
                 numstr = format_str.format(self.number)
             else:
                 numstr= "0"
@@ -346,8 +354,9 @@ class SciSigFig:
         new.round_numdig(nsf)
         return new
 
-    def in_range(low=0.01,high=20.0,nsf_range=None):
-        magnitude = uniform(low,high)
+    def in_range(low="0.01",high="20.0",nsf_range=None):
+        #a + (b-a) * self.random()
+        magnitude = Decimal(low)+ (Decimal(high)-Decimal(low))*Decimal(random())
         if nsf_range is None:
             nsf_range = [3,5]
         nsf = randint(*nsf_range)
