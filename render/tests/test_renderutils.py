@@ -15,7 +15,7 @@ def test_process_chemplate():
     template = chemplatedict[template_name]
 
     results_dict = RenderUtils.process_chemplate(template)
-    print(pformat(results_dict))
+    #print(pformat(results_dict))
     assert isinstance(results_dict["question"], str)
     assert isinstance(results_dict["answers"], list)
     for answer in results_dict["answers"]:

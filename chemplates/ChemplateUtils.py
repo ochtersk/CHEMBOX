@@ -3,6 +3,7 @@ from pprint import pformat
 #from py_expression_eval import Parser
 import CHEMBOX.chemplates.Chemplate as CP
 import CHEMBOX.chemplates.DataGenerators as DG
+import CHEMBOX.chemplates.DataGeneratorUtils as DGU
 
 """ These are functions that do utility work using Chemplates.
 """
@@ -81,3 +82,70 @@ def _dispatch(generator, config, *args):
     else:
         result = func(config,*args)
     return result
+
+
+def _validateListOfAnswers(answerlist):
+    verbose = False
+    if verbose: print("VERBOSE in CU._validateListOfAnswers")
+    resultsList =[]
+    answerSectionsFound = set()
+    answerSectionValidators={"value": DG.validate_args,
+                       "units" : DG.validate_args,
+                       "text": DG.validate_args,
+                       "correct": DG.validate_args,
+                     }
+    for answerNumber,contents in enumerate(answerlist,1):
+        for section,generator in contents.items():
+            if not section in answerSectionValidators.keys():
+                resultsList.append(f"Invalid answer section {section} found in answerlist")
+                continue
+            if verbose: print("generator:",pformat(generator))
+            results = answerSectionValidators[section](generator)
+            answerSectionsFound.add(section)
+            if len(results)>0:
+                resultstring = f"answer number {answerNumber} section {section} results:"+pformat(results)
+                resultsList.append("\n".join(results))
+                if verbose: print(resultstring)
+        if verbose: print("answerSectionsFound:",pformat(answerSectionsFound))
+        if verbose: print("     expected:",pformat(set(answerSectionValidators.keys())))
+        missing = set(answerSectionValidators.keys()).difference(answerSectionsFound)
+        if verbose: print("       missing:",pformat(sorted(missing)))
+        if len(missing)>0 :
+            resultsList.append(f"Missing answer section(s) in chemplate: {' '.join(sorted(missing))}")
+        if verbose: print(f"answer resultslist:",pformat(resultsList))
+    return "\n".join(sorted(resultsList))
+
+
+def validatefullChemplate(chemplate):
+    verbose = False
+    if verbose: print("VERBOSE in CU.validatefullChemplate")
+    assert isinstance(chemplate,dict), "validatefullChemplate: chemplate must be dict"
+    def _validateString(x):
+        return "" if isinstance(x,str) else f"{x} is not a valid string"
+    def _validateList(x):
+        return "" if isinstance(x,list) else f"{x} is not a valid list"
+    resultsList =[]
+    sectionsFound = set()
+    sectionValidators={"description":_validateString,
+                     "keywords" : _validateList,
+                     "sources": DGU.validate_dictOfDataGenerators,
+                     "questionlist": DGU.validate_listOfDataGenerators,
+                     "answerlist" : _validateListOfAnswers,
+                     }
+    for section,contents in chemplate.items():
+        if not section in sectionValidators.keys():
+            resultsList.append(f"Invalid section {section} found in template")
+            continue
+        results = sectionValidators[section](contents)
+        sectionsFound.add(section)
+        if len(results)>0:
+            resultstring = f"{section} section results:"+pformat(results)
+            resultsList.append(results)
+            if verbose: print(resultstring)
+    if verbose: print("sectionsFound:",pformat(sectionsFound))
+    if verbose: print("     expected:",pformat(set(sectionValidators.keys())))
+    missing = set(sectionValidators.keys()).difference(sectionsFound)
+    if verbose: print("       missing:",pformat(sorted(missing)))
+    if len(missing)>0 :
+        resultsList.append(f"Missing section(s) in chemplate: {' '.join(sorted(missing))}")
+    return resultsList

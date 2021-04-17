@@ -133,7 +133,7 @@ class SciSigFig:
         if verbose: print("\nnotation:",notation)
         if (dec_exp==0) and (len(digits)==nsf) and (digits[-1]==0):
             notation = "scientific"
-            if verbose: print("forcing scinetific notation")
+            if verbose: print("forcing scientific notation")
         if notation == 'scientific':
             if nsf>0:
                 format_str = "{:."+str(nsf-1)+"e}"

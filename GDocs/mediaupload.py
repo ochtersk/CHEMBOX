@@ -1,6 +1,7 @@
 from __future__ import print_function
 import pickle
 import os.path
+import sys
 from googleapiclient.http import MediaFileUpload
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -38,7 +39,7 @@ def main():
     service = build('drive', 'v3', credentials=creds)
 
     media = MediaFileUpload(
-        't.html',
+        sys.argv[1],
         mimetype='text/html',
         resumable=True,
     )

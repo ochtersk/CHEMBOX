@@ -1,4 +1,6 @@
 import pytest
+import commentjson
+import glob
 import json
 from pprint import pformat
 import CHEMBOX.chemplates.Chemplate as CP
@@ -127,3 +129,69 @@ def test_answer_template():
     filled = CPU.create_Chemplate_from_sources(answer_template_1, overrides, values=vars)
     #print("ANSWERS:",pformat(filled))
     assert filled.assertEqualTo(correct_CP)
+
+def test_validateFullChemplate():
+    full = {
+      "description": "Description of the problem type",
+      "keywords": ["keywords for looking up problems"],
+      "sources" : {
+      # "source_name" : {"function": {"param":value, ... } },
+        "mass" : { "random_value" : {"range" :{"low": 11.0, "high": 12.0}, "units" : "g" }},
+        "volume" : { "random_value" : {"range" : {"low": 5.5, "high": 6.0}, "units" : "mL" }}
+      },
+
+      "questionlist" : [
+      # template with vars, callables(chemformula, chemreaction)
+      # uses template_variables (see below)
+      # {"function": {"param":value, ... } },
+        {"fill_template":{ "template":"What is the density of a sample with mass {{mass}} and volume {{volume}}?", "vars":{"var1":"true"}}}
+      ],
+
+      "answerlist" : [
+      # uses values from sources
+      #answer_template: an answer_template is a dictionary with the following
+      #             keys (those currently used have asterisks. The others
+      #             are currently ignored):
+      #    'value' : the equation to get the answer, which is parsed and evaluated
+      #    'units' : units desired for the answer
+      #    'text' : text to be rendered as a jinja2 template. It could explain
+      #              the answer with variable values filled in
+      #    'correct' : a boolean flag tell in this answer is correct.
+      #  {"dictkey" : {"function": {"param":value, ... } },
+      #  },
+        {
+          "value" : { "parse_expression":{ "expression":"volume/mass", "vars":{}}},
+          "units" : {"copy_text":{"text": "g/mL"}},
+          "text" :  {"fill_template":{ "template":"mass/volume = ({{mass}})/{{volume}}", "vars":{}}},
+          "correct" : {"copy_text":{"text": "false"}}
+        },
+      ]
+
+      }
+    res = CPU.validatefullChemplate(full)
+
+def check_chemplatefile(filename):
+    with open(filename, 'r') as handle:
+        try:
+            chemplateDict = commentjson.load(handle)
+        except:
+            print(f"malformed JSON in {filename}")
+            handle.close()
+            return
+
+    chemplateNameList = [k for k in chemplateDict.keys() if "_answer" not in k ]
+
+    for name in chemplateNameList:
+        print(f"file:{filename} chemplate:{name}")
+        chemplate = chemplateDict[name]
+        answer = chemplateDict[name + "_answer"]
+        res = CPU.validatefullChemplate(chemplate)
+        #print("res::\n",str("\n".join(res)))
+        assert str("\n".join(res)) == answer
+
+
+def test_chemplatefiles():
+    chemplateFilenamesList = glob.glob('chemplates/testchemplates/chemplate*.json')
+    #print("files:",pformat(chemplateFilenamesList))
+    for file in chemplateFilenamesList:
+        check_chemplatefile(file)

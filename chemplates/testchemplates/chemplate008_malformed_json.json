@@ -1,0 +1,43 @@
+# template version 5
+#   cleaned up trailing dict commas (json won't allow)
+#   made the whole thing a dict, rather than list
+# entries will be processed in the order sources, questionlist, answerlist
+
+{"density1": {
+  "description": "Description of the problem type",
+  "keywords": ["keywords for looking up problems"],
+  "sources" : {
+  # "source_name" : {"function": {"param":value, ... } },
+    "mass" : { "random_value" : {"range" :{"low": 11.0, "high": 12.0}, "units" : "g" }},
+    "volume" : { "random_value" : {"range" : {"low": 5.5, "high": 6.0}, "units" : "mL" }}
+  },
+
+  "questionlist" : [
+  # template with vars, callables(chemformula, chemreaction)
+  # uses template_variables (see below)
+  # {"function": {"param":value, ... } },
+    {"fill_template":{ "template":"What is the density of a sample with mass {{mass}} and volume {{volume}}?", "vars":{"var1":"true"}}}
+  ],
+
+  "answerlist" : [
+  # uses values from sources
+  #answer_template: an answer_template is a dictionary with the following
+  #             keys (those currently used have asterisks. The others
+  #             are currently ignored):
+  #    'value' : the equation to get the answer, which is parsed and evaluated
+  #    'units' : units desired for the answer
+  #    'text' : text to be rendered as a jinja2 template. It could explain
+  #              the answer with variable values filled in
+  #    'correct' : a boolean flag tell in this answer is correct.
+  #  {"dictkey" : {"function": {"param":value, ... } },
+  #  },
+    {
+      "value" : { "parse_expression":{ "expression":"volume/mass", "vars":{"var1":"true"}}},
+      "units" : {"copy_text":{"text": "g/mL"}},
+      "text" :  {"fill_template":{ "template":"mass/volume = ({{mass}})/{{volume}}", "vars":{}}},
+    }
+  ]
+
+  },
+ "density1_answer":""
+}

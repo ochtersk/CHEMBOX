@@ -148,6 +148,7 @@ def _validate_number(nsf,exp,ztypes,numberstr):
     if ('L' in ztypes and 'L' not in sf.sfcode):
         valid = False
         print("No leading zeros found in:" + ",".join([numberstr,sf.sfcode]))
+        assert valid == True, "leading zeros not found"
     if ('M' in ztypes and 'M' not in sf.sfcode):
         valid = False
         print("No middle zeros:" + ",".join([numberstr,sf.sfcode]))
@@ -213,6 +214,10 @@ def test_generate_ztypes_defaults(ztypes_in,ntype):
         ztypes=ztypes_in,
         notation = ntype,
         )
+    if ztypes_in is not None and ntype == "scientific" :
+        #print ("ztypes_inB:",ztypes_in)
+        ztypes_in = ztypes_in.replace('L', '')
+        #print ("ztypes_inA:",ztypes_in)
     valid = _validate_number(None,None,ztypes_in,number)
     if ntype == 'scientific':
         valid = 'e' in number
@@ -249,7 +254,7 @@ def test_approximate_magnitude(target, pct):
 ])
 def test_approximate_magnitude_range(low,high,nsf_range):
     aa = SciSigFig.in_range(low=low,high=high,nsf_range=nsf_range)
-    print("low:",low, " aa:",aa.number," high:",high," nsf:",str(nsf_range),"REPR:",repr(aa))
+    #print("low:",low, " aa:",aa.number," high:",high," nsf:",str(nsf_range),"REPR:",repr(aa))
 
     assert aa.number >= Decimal(low)
     assert aa.number <= Decimal(high)

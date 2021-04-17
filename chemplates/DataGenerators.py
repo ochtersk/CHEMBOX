@@ -25,6 +25,7 @@ def set_valid_args_and_register(valid_args):
 
 def validate_args(DoD):
     verbose = False
+    if verbose: print("VERBOSE in DG.validate_args")
     error_list = []
     for funcname, argsdict in DoD.items():
         if verbose: print("FN:",funcname," ARGS:", pformat(argsdict))
@@ -40,7 +41,7 @@ def validate_args(DoD):
                     f"valid: {func_valid_args.keys()}")
                 continue
             if isinstance(value, dict):
-                if verbose: print(f"arg {arg} value is dict ") # compare subargs
+                if verbose: print(f"arg {arg} value is dict : {func_valid_args[arg]}") # compare subargs
                 if len(func_valid_args[arg].keys())>0: # empty dict means don't check args
                     for subarg, subvalue in value.items():
                         if verbose: print(f"     subarg {subarg} value is {subvalue} ") # compare subargs
@@ -112,7 +113,7 @@ def random_value(repl=None):
 
 
 @set_valid_args_and_register({"expression":"",
-            "vars": ""})
+            "vars": {}})
 def parse_expression(args):
     """generate data from a parsed expression
 
