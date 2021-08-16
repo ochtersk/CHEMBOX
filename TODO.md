@@ -11,10 +11,12 @@
        1. duplicate equation detector
        1. DONE: discern reaction type
     1. balancing
-    1. Done: (pretty well - needs refactoring) reaction types
+    1. stoichiometry
+    1. DONE: (pretty well - needs refactoring) reaction types
     1. predicting products
     1. reaction db
-
+1, Units conversions
+  1. use Pint https://pint.readthedocs.io/en/stable/index.html
 
 # code fixes
 1. fix function names to snake case

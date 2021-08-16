@@ -33,7 +33,7 @@ class DataUnits():
         Parameters
         ----------
         units: str
-        a string representing the desire units
+        a string representing the desired units
             numerator and denominator are separated by "/"
             units within the numerator or denominator are separated by "*", and
             can be either in exponetial "m^2" or expanded "m*m" notation

@@ -30,10 +30,8 @@ class Rxn(Reaction):
     """
     def __init__(self, reactionText):
         super().__init__(reactionText)
-        (self.RxnReactants,self.RxnProducts) = self._parseReaction(reactionText)
+        self.reaction = self._parseReaction(reactionText)
         self.RxnEquation = reactionText
-        self.RxnType = self.detectRxnType()
-        self.RxnDifficulty = None
 
 
     def __repr__(self):
@@ -41,29 +39,34 @@ class Rxn(Reaction):
         return string
 
     def __str__(self):
-        string=f"{self.RxnEquation} is {self.RxnType}"
+        string=f"{self.RxnEquation}"
         return string
 
     def _parseReaction(self,reactionText):
         verbose = False
-        if verbose: print(f"_parseRT: {reactionText}")
+        if verbose: print(f"_parseReaction: {reactionText}")
         reaction = Reaction(reactionText)
         if verbose:
             print(f"Reaction.reactants: {pformat(reaction.reactants)}")
             print(f"Reaction.products: {pformat(reaction.products)}")
-        reactants = [RC.RxnComponent(x[0],str(x[1])) for x in reaction.reactants]
-        products  = [RC.RxnComponent(x[0],str(x[1])) for x in reaction.products]
-        if verbose:
-            print(f"Rxn.reactants: {pformat(reactants)}")
-            print(f"Rxn.products: {pformat(products)}")
+        return reaction
 
-        return (reactants,products)
+    def _getFormulas(self,componentList):
+        formulas =[RC.RxnComponent(x[0],str(x[1])) for x in componentList]
+        return formulas
+
+    def RxnReactants(self):
+        return self._getFormulas(self.reactants)
+
+    def RxnProducts(self):
+        return self._getFormulas(self.products)
+
 
     def detectRxnType(self):
         #XXX refactor this
         verbose = False
-        reactantSet = { x.chemicalType for x in self.RxnReactants}
-        productSet = { x.chemicalType for x in self.RxnProducts}
+        reactantSet = { x.chemicalType for x in self.RxnReactants()}
+        productSet = { x.chemicalType for x in self.RxnProducts()}
         if verbose: print(f"reaction: {self.RxnEquation}")
         if verbose: print(f"reactant set:{pformat(reactantSet)}")
         if verbose: print(f"product  set:{pformat(productSet)}")

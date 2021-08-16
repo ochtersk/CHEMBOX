@@ -1,14 +1,17 @@
 import pytest
 from pprint import pformat
+from pyvalem.reaction import Reaction
 import CHEMBOX.chemistry.Rxn as Rxn
 
 def test_new_Rxn():
-    components = Rxn.Rxn('O2 + 2H2 -> 2H2O')
-    print(components.html)
-    assert len(components.RxnReactants)==2, "reaction creation failed"
+    reaction = Rxn.Rxn('O2 + 2H2 -> 2H2O')
+    #print(components.html)
+    assert isinstance(reaction , Reaction), "reaction creation failed"
 
 @pytest.mark.parametrize("reaction,string,representation",[
-('7O2 + C6H5OH -> 6CO2 + 3H2O',"7O2 + C6H5OH -> 6CO2 + 3H2O is combustion",'Rxn("7O2 + C6H5OH -> 6CO2 + 3H2O")' ),
+('7O2 + C6H5OH -> 6CO2 + 3H2O',
+    "7O2 + C6H5OH -> 6CO2 + 3H2O",
+    'Rxn("7O2 + C6H5OH -> 6CO2 + 3H2O")' ),
 ])
 def test_Rxn_reps(reaction,string,representation):
     rxn = Rxn.Rxn(reaction)
@@ -29,7 +32,7 @@ def test_Rxn_reps(reaction,string,representation):
 ])
 def test_rxn_categorization(reaction,rxntype):
     rxn = Rxn.Rxn(reaction)
-    assert rxn.RxnType==rxntype, "RxnType doesn't match"
+    assert rxn.detectRxnType()==rxntype, "RxnType doesn't match"
 
 def regenerate_cleaned_rxns():
     with open('RXN/no_state_raw.txt', "r") as file_object:

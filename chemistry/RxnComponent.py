@@ -14,7 +14,7 @@ class RxnComponent(Formula):
 
     Public Methods
     --------------
-    __init__ create a new ChemForula with the supplied formula, charge and name:
+    __init__ create a new ChemFormula with the supplied formula, charge and name:
                 - formula: a chemical formula in text format, like Co3(PO4)2
                 - charge : optional charge (zero is the default)
                 - name : optional name of the compound
