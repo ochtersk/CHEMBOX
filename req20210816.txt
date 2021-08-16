@@ -5,6 +5,7 @@ Jinja2==3.0.1
 lark-parser==0.7.8
 MarkupSafe==2.0.1
 packaging==21.0
+Pint==0.17
 pluggy==0.13.1
 py==1.10.0
 py-expression-eval==0.3.13
