@@ -124,7 +124,7 @@ class SciSigFig:
             (self.number,numstr, self.sfcode,self.sfid,self.sfcount,self.uexp,self.notation)
 
     def __str__(self):
-        verbose = True
+        verbose = False
         numstr = ''
         nsf = self.sfcount
         notation = self.notation
