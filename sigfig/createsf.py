@@ -124,7 +124,7 @@ class SciSigFig:
             (self.number,numstr, self.sfcode,self.sfid,self.sfcount,self.uexp,self.notation)
 
     def __str__(self):
-        verbose = False
+        verbose = True
         numstr = ''
         nsf = self.sfcount
         notation = self.notation
@@ -142,7 +142,10 @@ class SciSigFig:
             else:
                 numstr= "0"
         else:
-            numstr = str(round(self.number,-position))
+            if (self.number==0 and nsf==0):
+                numstr = "0"
+            else:
+                numstr = str(round(self.number,-position))
             if verbose: print("\nnormal notation:", numstr, " pos:",position, "nfs:",nsf)
         return numstr
 

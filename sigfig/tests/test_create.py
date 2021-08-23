@@ -36,6 +36,10 @@ def test_create(test_input,sfcode,sfid):
     assert num.sfcode == sfcode
     assert num.sfid == sfid
 
+def test_create_zero():
+    num = SciSigFig("0")
+    assert str(num) == "0"
+
 
 
 @pytest.mark.parametrize("exp_in",[3,1,-4])
