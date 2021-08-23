@@ -16,7 +16,8 @@
     1. predicting products
     1. reaction db
 1, Units conversions
-  1. use Pint https://pint.readthedocs.io/en/stable/index.html
+  1. DONE use Pint https://pint.readthedocs.io/en/stable/index.html
+  1. add flag to DataValue __init__ to get abbrev units.
 
 # code fixes
 1. fix function names to snake case

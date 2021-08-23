@@ -20,9 +20,9 @@ def isinrange(val,low,high):
 
 
 @pytest.mark.parametrize("units", [
-    ({'units':"g"}),
-    ({'units':''}),
-    ({'units':"m/s"}),
+    ({'units':"gram"}),
+    ({'units':'dimensionless'}),
+    ({'units':"meter / second"}),
 ])
 @pytest.mark.parametrize("repl,low,high", [
     ({}, 0.01,10),
@@ -57,9 +57,9 @@ def test_exactnumbers(number,answerstr):
 
 @pytest.mark.parametrize("expression, vars, answer", [
     #I use str because I don't want rounding errors in comparison
-    ("1+2",{},3 ),
+    ("1+2",{},"3 dimensionless" ),
     ("one + two", {'one' : DV.DataValue("1"), 'two': DV.DataValue("2")}, DV.DataValue("3")),
-    ("one + two", {'one' : DV.DataValue("1 g"), 'two': DV.DataValue("2 g")}, DV.DataValue("3 g")),
+    ("one + two", {'one' : DV.DataValue("1 g"), 'two': DV.DataValue("2 g")}, DV.DataValue("3 gram")),
 ])
 def test_parser(expression, vars, answer ):
     x = DG.parse_expression({"expression":expression, "vars":vars})

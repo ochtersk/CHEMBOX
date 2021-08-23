@@ -54,16 +54,16 @@ def test_create_Chemplate_from_sources_multisource_with_two_overrides1():
     assert str(var.getIDattr('rand2b','value')) == str(DV.DataValue("123.567"))
 
 def test_create_Chemplate_from_sources_with_overrides2():
-    overrides = CP.Chemplate(DoD={"rand3" :{'random_value' :{'type' : 'exact', 'exact' : '127.456', 'units': 'g/mL'}}})
+    overrides = CP.Chemplate(DoD={"rand3" :{'random_value' :{'type' : 'exact', 'exact' : '127.456', 'units': 'gram / milliliter'}}})
     source = CP.Chemplate(DoD={'rand3':{'random_value' : {'range' : {'low': 11.0, 'high': 12.0}}}})
     var = CPU.create_Chemplate_from_sources(source,overrides)
-    assert str(var.getIDattr('rand3','value')) == str(DV.DataValue("127.456 g/mL"))
+    assert str(var.getIDattr('rand3','value')) == str(DV.DataValue("127.456 gram / milliliter"))
 
 def test_create_Chemplate_from_sources_with_overrides2():
-    overrides = CP.Chemplate(DoD={"rand3" :{'random_value' :{'type' : 'exact', 'exact' : '127.456', 'units': 'g/mL'}}})
+    overrides = CP.Chemplate(DoD={"rand3" :{'random_value' :{'type' : 'exact', 'exact' : '127.456', 'units': 'gram / milliliter'}}})
     source = CP.Chemplate(DoD={'rand3':{'random_value' : {'range' : {'low': 11.0, 'high': 12.0}}}})
     var = CPU.create_Chemplate_from_sources(source,overrides)
-    assert str(var.getIDattr('rand3','value')) == str(DV.DataValue("127.456 g/mL"))
+    assert str(var.getIDattr('rand3','value')) == str(DV.DataValue("127.456 gram / milliliter"))
 
 def test_create_Chemplate_from_sources_with_valsdict():
     source = CP.Chemplate(DoD={ "expr":{"parse_expression":{ "expression":"mass/density",
@@ -95,7 +95,7 @@ def test_answer_template():
     var = CPU.create_Chemplate_from_sources(source)
     answer_template_1 = CP.Chemplate(DoD={
             "value" : { "parse_expression":{ "expression":"mass/density", "use_values":"true"}},
-            "units" : {"copy_text":{"text": "g/mL"}},
+            "units" : {"copy_text":{"text": "gram / milliliter"}},
             "text" :  {"fill_template":{ "template":"mass/volume = ({{mass}})/{{volume}} = {{density}}", "use_values":"true"}},
             "text2" :  {"fill_template":{ "template":"mag units = {{property.magnitude}} {{property['units']}}", "use_values":"true"}},
             "text3" :  {"fill_template":{ "template":"density = {{mass/volume}}", "use_values":"true"}},
@@ -107,12 +107,12 @@ def test_answer_template():
         })
     correct_answers = {'correct': {'value': 'true'},
         'reason': {'value': 'To be implemented'},
-        'text': {'value': 'mass/volume = (10.00 g)/2.00 mL = 5.0000 g/mL'},
+        'text': {'value': 'mass/volume = (10.00 gram)/2.00 milliliter = 5.0000 gram / milliliter'},
         'text2': {'value': 'mag units = 7.777 km/hr'},
-        'text3': {'value': 'density = 5.00 g/mL'},
-        'text4': {'value': 'two = 2.00'},
-        'units': {'value': 'g/mL'},
-        'value': {'value': str(DV.DataValue("2.000 mL"))}
+        'text3': {'value': 'density = 5.00 gram / milliliter'},
+        'text4': {'value': 'two = 2.00 dimensionless'},
+        'units': {'value': 'gram / milliliter'},
+        'value': {'value': str(DV.DataValue("2.000 milliliter"))}
         }
     #print("SOURCE:",pformat(var))
     overrides = CP.Chemplate(DoD= {})
@@ -120,8 +120,8 @@ def test_answer_template():
     ten =  DV.DataValue('10.00 g')
     #This should be a DOD with "values"
     vars = { 'mass' : ten,
-             'volume' : DV.DataValue('2.00 mL'),
-             'density': DV.DataValue('5.0000 g/mL'),
+             'volume' : DV.DataValue('2.00 milliliter'),
+             'density': DV.DataValue('5.0000 gram / milliliter'),
              'property':{"magnitude":7.777, "units":"km/hr"}
              }
     vars.update([("rand1",var.getID("rand1")),("rand2",var.getID("rand2"))])
@@ -137,7 +137,7 @@ def test_validateFullChemplate():
       "sources" : {
       # "source_name" : {"function": {"param":value, ... } },
         "mass" : { "random_value" : {"range" :{"low": 11.0, "high": 12.0}, "units" : "g" }},
-        "volume" : { "random_value" : {"range" : {"low": 5.5, "high": 6.0}, "units" : "mL" }}
+        "volume" : { "random_value" : {"range" : {"low": 5.5, "high": 6.0}, "units" : "milliliter" }}
       },
 
       "questionlist" : [
@@ -161,7 +161,7 @@ def test_validateFullChemplate():
       #  },
         {
           "value" : { "parse_expression":{ "expression":"volume/mass", "vars":{}}},
-          "units" : {"copy_text":{"text": "g/mL"}},
+          "units" : {"copy_text":{"text": "gram / milliliter"}},
           "text" :  {"fill_template":{ "template":"mass/volume = ({{mass}})/{{volume}}", "vars":{}}},
           "correct" : {"copy_text":{"text": "false"}}
         },

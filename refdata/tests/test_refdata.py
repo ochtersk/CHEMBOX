@@ -4,8 +4,8 @@ import CHEMBOX.refdata.RefData as RD
 
 #pytestmark = pytest.mark.skip("all tests still WIP")
 @pytest.mark.parametrize("Cprop,Cname,answer", [
-    ("density","ethanol","0.7851 g/mL"),
-    ("density","ethanol at 20C","0.789 g/mL"),
+    ("density","ethanol","0.7851 gram / milliliter"),
+    ("density","ethanol at 20C","0.789 gram / milliliter"),
 ])
 def test_RefData_object(Cprop, Cname, answer):
     #ans = DV.DataValue(answer)
@@ -15,9 +15,9 @@ def test_RefData_object(Cprop, Cname, answer):
     assert str(x) == test_str
 
 @pytest.mark.parametrize("Cprop,Cname,answer", [
-    ("destinyXX","ethanol","0.7851 g/mL"),
-    ("density","ethanol at XXC","0.789 g/mL"),
-    ("density","ethanol","0.7856 g/mL"),
+    ("destinyXX","ethanol","0.7851 gram / milliliter"),
+    ("density","ethanol at XXC","0.789 gram / milliliter"),
+    ("density","ethanol","0.7856 gram / milliliter"),
 ])
 def test_RefData_object_fail(Cprop, Cname, answer):
     #ans = DV.DataValue(answer)

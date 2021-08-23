@@ -141,7 +141,7 @@ def parse_expression(args):
 
     parser = Parser()
     result = parser.parse(expression).evaluate(vars)
-    return {'value' : result}
+    return {'value' : DV.DataValue(result)}
 
 @set_valid_args_and_register({"template":"",
             "vars":{}    })
