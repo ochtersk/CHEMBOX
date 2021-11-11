@@ -428,9 +428,12 @@ class SciSigFig:
         return self.subtract(subtrahend)
 
     def multiply(self,mult):
-        min_sf = min(self.sfcount,mult.sfcount)
-        #print("operands:",self.number, mult.number)
-        result = SciSigFig(self.number * mult.number)
+        if isinstance(mult,float):
+            min_sf = self.sfcount
+            result = SciSigFig(self.number * Decimal(mult))
+        else:
+            min_sf = min(self.sfcount,mult.sfcount)
+            result = SciSigFig(self.number * mult.number)
         #print("multiply answer:",repr(result))
         result.force_sfcount(min_sf)
         return (result)
@@ -439,8 +442,12 @@ class SciSigFig:
         return self.multiply(mult)
 
     def divide(self,mult):
-        min_sf = min(self.sfcount,mult.sfcount)
-        result = SciSigFig(self.number / mult.number)
+        if isinstance(mult,float):
+            min_sf = self.sfcount
+            result = SciSigFig(self.number / Decimal(mult))
+        else:
+            min_sf = min(self.sfcount,mult.sfcount)
+            result = SciSigFig(self.number / mult.number)
         #print("answwer:",str(result))
         result.force_sfcount(min_sf)
         return (result)

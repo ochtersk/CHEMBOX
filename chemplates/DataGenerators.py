@@ -196,3 +196,31 @@ def copy_text(args):
     text = args["text"]
     result = text
     return {"value":result}
+
+# XXXX
+# @set_valid_args_and_register({
+#     "from_units":"",
+#     "to_units":"",
+#     "input_value":"",
+#         })
+# def convert(args):
+#     """convert a value
+#
+#     Parameters
+#     ----------
+#     text = text to copy
+#
+#     Returns
+#     -------
+#     the argument
+#
+#     Raises
+#     ------
+#     AttributeError
+#         if no attribute, value pair or dict is specified.
+#
+#     """
+#     verbose = False
+#     text = args["text"]
+#     result = text
+#     return {"value":result}

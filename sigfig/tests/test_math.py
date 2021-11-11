@@ -143,3 +143,48 @@ def test_exactmath(exactnum,floatnum,multans,divans,divans2):
     assert str(divres) == divans
     divres2 = flt/exact
     assert str(divres2) == divans2
+
+
+@pytest.mark.parametrize("overload",[0,1])
+@pytest.mark.parametrize("a,operator,b,answer", [
+    ('10.00',"/",2.00,'5.000'),
+    ("1.23","*",2.1,"2.58"),
+    ("1.23","*",-2.1,"-2.58"),
+    ("-1.23","*",2.1,"-2.58"),
+    ("-1.23","*",-2.1,"2.58"),
+    ("1.2","*",2.14,"2.6"),
+    ("1.23","*",2.15,"2.64"),
+    ("1.234e+1","*",2.15,"26.53"),
+    ("1.23e+1","*",2.15,"26.4"),
+    ("1.23e+1","*",2.16,"26.6"),
+    ("1.23e+1","*",2.15e+0,"26.4"),
+    ("1.23e+1","*",2.16e+0,"26.6"),
+    ("1.23","/",2.1,"0.586"),
+    ("1.2","/",2.14,"0.56"),
+    ("1.23","/",2.15,"0.572"),
+    ("1.234e+1","/",2.15,"5.740"),
+    ("1.23e+1","/",2.15,"5.72"),
+    ("1.23e+1","/",2.16,"5.69"),
+    ("1.23e+1","/",2.15e+0,"5.72"),
+    ("1.23e+1","/",2.16e+0,"5.69"),
+])
+def test_scalarmuldiv(a,operator,b,answer,overload):
+    aa = SciSigFig(a)
+    ba = b
+    res=0
+    if operator == "*":
+        if overload:
+            res = aa*ba
+        else:
+            res = aa.multiply(ba)
+        #print("MUL:",aa,"*",ba, "round to:", res.sfcount)
+    elif operator == "/":
+        if overload:
+            res = aa/ba
+        else:
+            res = SciSigFig.divide(aa,ba)
+        #print("DIV:",aa,"/",ba, "round to:",res.sfcount)
+    else:
+        assert False, "bad operator:"+operator
+    #print("result:\n", repr(res))
+    assert str(res) == answer

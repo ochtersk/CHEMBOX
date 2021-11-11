@@ -186,13 +186,13 @@ def check_chemplatefile(filename):
         chemplate = chemplateDict[name]
         answer = chemplateDict[name + "_answer"]
         res = CPU.validatefullChemplate(chemplate)
-        #print("res::\n",str("\n".join(res)))
+        print("res::\n",str("\n".join(res)))
         assert str("\n".join(res)) == answer
 
 
-def tesxt_chemplatefiles():
+def test_chemplatefiles():
     # this doesn't work for all chemplate files because some are intentionally malformed (008)
-    chemplateFilenamesList = glob.glob('chemplates/testchemplates/chemplate*.json')
+    chemplateFilenamesList = glob.glob('chemplates/testchemplates/chemplate009*.json')
     #print("files:",pformat(chemplateFilenamesList))
     for file in chemplateFilenamesList:
         check_chemplatefile(file)
