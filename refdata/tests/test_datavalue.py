@@ -16,6 +16,20 @@ def test_DataValue_object(mag, units, answer):
     assert str(x.units) == units
 
 
+@pytest.mark.parametrize("mag,mag_exact,units,answer", [
+    ("2.4","2.4000000000000000000","liter / minute","2.4000000000000000000 liter / minute"),
+    ("2.4e2","240.00000000000000000","liter / minute","240.00000000000000000 liter / minute"),
+    ("2.4","2.4000000000000000000","minute * mole / liter","2.4000000000000000000 minute * mole / liter"),
+    ("2.4","2.4000000000000000000","liter / minute ** 2","2.4000000000000000000 liter / minute ** 2"),
+])
+def test_DataValue_object_exact(mag, mag_exact, units, answer):
+    x = DV.DataValue(mag, units, exact = True)
+    #print("DV repr:"+repr(x))
+    assert str(x) == answer
+    assert str(x.magnitude) == mag_exact
+    assert str(x.units) == units
+
+
 def test_datavalue_mul():
     x = DV.DataValue("2.314", "g/mL")
     y = DV.DataValue("2.0", "mL")

@@ -29,7 +29,7 @@ def test_do_convert(inputDVstr,finalunitsstr,answerDVstr):
     assert isinstance(convertedDV,DV.DataValue)
     #print("do_convert:",pformat(convertedDV))
     #XXX TO DO:
-    # make conversions exact
+    # DONE: make conversions exact
     # DONE: make arbitrary units work
     #get datavalue to take strings with no space delimiters
 
