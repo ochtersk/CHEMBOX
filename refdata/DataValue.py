@@ -21,7 +21,7 @@ class DataValue():
         do math with two DataValues do the right thing with sig figs and units
 
     """
-    def __init__(self, magnitude = None , units = None, unitsformat = '', ):
+    def __init__(self, magnitude = None , units = None, unitsformat = '',exact = False ):
         verbose = False
         if verbose: print("----------")
         magnitude_in = magnitude
@@ -61,7 +61,7 @@ class DataValue():
         if verbose: print("DV init mag:", magnitude,"units:",units)
         if verbose: print("DV REPR mag:", repr(magnitude),"units:",repr(units))
         assert magnitude is not None
-        magnitude_SF = SF.SciSigFig(str(magnitude))
+        magnitude_SF = SF.SciSigFig(str(magnitude), exact = exact )
         if verbose: print("DV mag_SF:",magnitude_SF.dump())
         self.quantity=Q_(magnitude_SF,units)
         if verbose: print("DV Q_:",self.quantity)

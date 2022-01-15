@@ -1,5 +1,7 @@
-prefixes = {}
-prefixes["24-24"] = {
+units_sets= {}
+units_sets["prefixes"] = {}
+units_sets["units"] = {}
+units_sets["prefixes"]["24-24"] = {
     "yocto": "y",
     "zepto":"z",
     "atto":"a",
@@ -21,7 +23,7 @@ prefixes["24-24"] = {
     "zetta":"Z",
     "yotta":"Y",
 }
-prefixes["3-3"] = {
+units_sets["prefixes"]["3-3"] = {
     "milli":"m",
     "centi":"c",
     "deci":"d",
@@ -29,7 +31,7 @@ prefixes["3-3"] = {
     "hecto":"h",
     "kilo":"k",
 }
-prefixes["15-15"] = {
+units_sets["prefixes"]["15-15"] = {
     "femto":"f",
     "pico":"p",
     "nano":"n",
@@ -44,4 +46,11 @@ prefixes["15-15"] = {
     "giga":"G",
     "tera":"T",
     "peta":"P",
+}
+units_sets["units"]["length_common_english"] = {
+    "feet":"ft",
+    "yard":"yd",
+    "foot":"ft",
+    "inch":"in",
+    "mile":"mi",
 }

@@ -53,7 +53,8 @@ def do_convert(inputDV,finalunits):
 
     """
     verbose = True
-    resultDV = inputDV.quantity.to(finalunits)
+    result = inputDV.quantity.to(finalunits)
+    resultDV = DV.DataValue(result.magnitude,result.units)
     return resultDV
 
 def get_conversion_factor(input_units,output_units):
@@ -72,10 +73,41 @@ def get_conversion_factor(input_units,output_units):
     ------
 
     """
-    inputDV=DV.DataValue(" ".join(("1.0",input_units)))
+    inputDV=DV.DataValue(" ".join(("1",input_units)), exact=True)
     resultDV = do_convert(inputDV,output_units)
+    #print("get_conversion_factor::",pformat(resultDV))
     return resultDV
 
+
+def _get_units_sets_set(type=None,set_label=None, abbreviations="YES"):
+    """_get_units_sets_set get a set of from units_sets.py
+
+    Parameters
+    ----------
+    type = SI|prefixes
+    set_label = a key for the
+    abbreviations YES to return just abbreviations (default), NO for full prefix, BOTH returns both
+
+    Returns
+    -------
+    a set of strings which can be used as metric prefixes
+
+    Raises
+    ------
+
+    """
+    return_set =set();
+    if (set_label) in UNIT_SETS.units_sets[type]:
+        if abbreviations == "YES":
+            return_set = set(UNIT_SETS.units_sets[type][set_label].values())
+        elif abbreviations == "NO":
+            return_set = set(UNIT_SETS.units_sets[type][set_label].keys())
+        else:
+            return_set = set(UNIT_SETS.units_sets[type][set_label].keys()).union(\
+                         set(UNIT_SETS.units_sets[type][set_label].values()))
+    else:
+        raise KeyError(f"key {set_label} does not exist in {units_sets[type]}")
+    return return_set
 
 def get_metric_prefix_set(set_label=None, abbreviations="YES"):
     """get_metric_prefix_set get a set of metric prefixes to convert from/to
@@ -93,30 +125,43 @@ def get_metric_prefix_set(set_label=None, abbreviations="YES"):
     ------
 
     """
-    prefix_set =set();
-    if (set_label) in UNIT_SETS.prefixes:
-        if abbreviations == "YES":
-            prefix_set = set(UNIT_SETS.prefixes[set_label].values())
-        elif abbreviations == "NO":
-            prefix_set = set(UNIT_SETS.prefixes[set_label].keys())
-        else:
+    type="prefixes"
+    return _get_units_sets_set(type,set_label, abbreviations)
 
-            prefix_set = set(UNIT_SETS.prefixes[set_label].keys()).union(\
-                         set(UNIT_SETS.prefixes[set_label].values()))
+def _get_matching_dimensionality(dimensionality=None,compatible_with=None):
+    units_set = set()
+    to_match = ""
+    if compatible_with is not None:
+        try:
+            to_match = ureg.get_dimensionality(compatible_with)
+        except:
+            pass
+    elif dimensionality is not None:
+        to_match = dimensionality
     else:
-        raise KeyError(f"key {set_label} does not exist in prefixes")
-    return prefix_set
+        raise Exception(f"Either dimensionality or compatible_with must be specified")
+    for i in ureg:
+        try:
+            i_dimensionality = ureg.get_dimensionality(i)
+            #print(f"i:{i} dim:{i_dimensionality}")
+        except:
+            i_dimensionality = "no dims?"
+        if i_dimensionality == to_match:
+            units_set.add(i)
+    #print("with dimensionality:",pformat(units_set))
+    return units_set
 
-def get_units_set():
+
+def get_units_set(dimensionality=None, compatible_with=None,set_label=None,
+                    abbreviations="YES"):
     """get_units_set get a set of units to convert from/to
 
     Parameters
     ----------
     dimensionality : (optional) dimensionality of units
     compatible_with : (optional) units to make the set compatible with
-    use_metric : (optional) BASIC|EXTENDED|ALL to include sets of metric prefixes
-    SI_only : (optional) use only SI units
-    predefined_set : (optional) the name of a predefined set of
+    set_label : (optional) the name of a predefined set of units
+    abbreviations YES to return just abbreviations (default), NO for full prefix, BOTH returns both
 
     Returns
     -------
@@ -126,4 +171,33 @@ def get_units_set():
     ------
 
     """
-    pass
+    if set_label is not None:
+        type="units"
+        return _get_units_sets_set(type,set_label, abbreviations)
+    if dimensionality is not None:
+
+        units_set = _get_matching_dimensionality(dimensionality=dimensionality)
+        #print("with dimensionality:",pformat(units_set))
+        return units_set
+
+
+def create_conversion_parameters(unit_set):
+    """create_conversion_parameters - create a set of conversion parmeters from a given unit set
+
+    Parameters
+    ----------
+    unit_set a set of strings
+
+    Returns
+    -------
+    a tuple of two strings and a DataValue. The strings are from the set to use as
+        input and output units, and the DataValue is a conversion factor between the units
+
+    Raises
+    ------
+
+    """
+    input_units =  unit_set.pop()
+    output_units = unit_set.pop()
+    conversion_factor = get_conversion_factor(input_units,output_units)
+    return(input_units,output_units,conversion_factor)
