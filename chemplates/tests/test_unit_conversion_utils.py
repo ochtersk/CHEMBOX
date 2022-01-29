@@ -52,19 +52,13 @@ def test_do_convert_broken_calls(inputDVstr,finalunitsstr,answerDVstr):
         convertedDV = do_convert(inputDV,finalunits)
         assert "DimensionalityError" in str(excinfo.value)
 
-@pytest.mark.parametrize("setname,abbrev,lookfor,shouldntsee", [
-    ("3-3", "NO", ["deca","centi"], ["da","m"]),
-    ("3-3", "YES", ["c"], ["centi","y","yotta"]),
-    ("3-3", "BOTH", ["c","centi"], ["y","yotta"]),
-    ("15-15", "NO", ["femto","peta"], ["f","P"]),
-    ("15-15", "YES", ["P","p","n"], ["peta","pico","exa","yotta"]),
-    ("15-15", "BOTH", ["c","centi"], ["y","yotta"]),
-    ("24-24", "NO", ["femto","peta"], ["Q","q"]),
-    ("24-24", "YES", ["P","f"], ["xpeta","xpico","xexa","xyotta"]),
-    ("24-24", "BOTH", ["c","centi"], ["yY","yytta"]),
+@pytest.mark.parametrize("setname,lookfor,shouldntsee", [
+    ("3-3",  ["deca","centi"], ["da","m"]),
+    ("15-15",["femto","peta"], ["f","P"]),
+    ("24-24",["femto","peta"], ["Q","q"]),
     ])
-def test_get_metric_prefix_set(setname,abbrev,lookfor,shouldntsee):
-    prefix_set = get_metric_prefix_set(set_label=setname, abbreviations=abbrev)
+def test_get_metric_prefix_set(setname,lookfor,shouldntsee):
+    prefix_set = get_metric_prefix_set(set_label=setname)
     for item in lookfor:
         assert (item in prefix_set), f"can't find {item} in {*prefix_set,}"
     for item in shouldntsee:
@@ -72,13 +66,13 @@ def test_get_metric_prefix_set(setname,abbrev,lookfor,shouldntsee):
 
 
 
-@pytest.mark.parametrize("setname,abbrev,lookfor,shouldntsee", [
-    ("length_common_english", "NO", ["feet","foot"], ["ft"]),
-    ("length_common_english", "YES",  ["ft"], ["feet","foot"]),
-    ("length_common_english", "BOTH",  ["ft","feet","foot"],["m","meter"]),
+@pytest.mark.parametrize("setname,lookfor,shouldntsee", [
+    ("length_common_english",  ["feet","foot"], ["ft"]),
+    ("length_common_english",  ["feet"], ["ft"]),
+    ("length_common_english",  ["feet","foot"],["m","meter"]),
     ])
-def test_get_units_set_setname(setname,abbrev,lookfor,shouldntsee):
-    units_set = get_units_set(set_label=setname, abbreviations=abbrev)
+def test_get_units_set_setname(setname,lookfor,shouldntsee):
+    units_set = get_units_set(set_label=setname)
     for item in lookfor:
         assert (item in units_set), f"can't find {item} in {*units_set,}"
     for item in shouldntsee:
@@ -90,7 +84,7 @@ def test_get_units_set_setname(setname,abbrev,lookfor,shouldntsee):
     ("[length] **3", ["gallon","liter"], ["feet","foot"]),
     ])
 def test_get_units_set_dimensionality(dimensionality,lookfor,shouldntsee):
-    units_set = get_units_set(dimensionality=dimensionality, abbreviations="NO")
+    units_set = get_units_set(dimensionality=dimensionality)
     for item in lookfor:
         assert (item in units_set), f"can't find {item} in {*units_set,}"
     for item in shouldntsee:
