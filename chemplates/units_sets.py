@@ -52,5 +52,4 @@ units_sets["units"]["length_common_english"] = {
     "yard":"yd",
     "foot":"ft",
     "inch":"in",
-    "mile":"mi",
 }

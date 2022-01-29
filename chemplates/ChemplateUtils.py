@@ -68,7 +68,7 @@ def create_Chemplate_from_sources(sources, overrides=None, values=None):
             else:
                 res = _dispatch(generator, args)
             locVar.setID(ID=id, dict=res)
-    if verbose: print("locVar:",pformat(locVar))
+    if verbose: print("-----------------------------------\nlocVar:",pformat(locVar),"\n-----\n")
     return locVar
 
 def _dispatch(generator, config, *args):
@@ -132,6 +132,9 @@ def validatefullChemplate(chemplate):
                      "questionlist": DGU.validate_listOfDataGenerators,
                      "answerlist" : _validateListOfAnswers,
                      }
+    intermediate_sections = [key for key, val in chemplate.items() if "intermediate_" in key]
+    for section in intermediate_sections:
+        sectionValidators[section] = DGU.validate_dictOfDataGenerators
     for section,contents in chemplate.items():
         if not section in sectionValidators.keys():
             resultsList.append(f"Invalid section {section} found in template")

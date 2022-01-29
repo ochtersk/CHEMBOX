@@ -5,6 +5,7 @@ from py_expression_eval import Parser
 from jinja2 import Template
 import CHEMBOX.refdata.DataValue as DV
 import CHEMBOX.sigfig.createsf as SF
+import CHEMBOX.chemplates.unit_conversion_utils as UCU
 
 
 # known gnerators keeps a dict of known generators, where teh name of the
@@ -107,7 +108,11 @@ def random_value(repl=None):
         mag = SF.SciSigFig(str(numberstr))
     else:
         assert False, f"config.type \"{config['type']}\" is not 'range'|'approx'"
-    datavalue = DV.DataValue(magnitude=str(mag), units=config['units'])
+    if config['units'] == '':
+        use_units = None
+    else:
+        use_units = config['units']
+    datavalue = DV.DataValue(magnitude=str(mag), units=use_units)
     if verbose: print("randomValue return:",pformat(datavalue))
     return {'value' : datavalue}
 
@@ -196,6 +201,62 @@ def copy_text(args):
     text = args["text"]
     result = text
     return {"value":result}
+
+
+@set_valid_args_and_register({
+    "setcollection":"",
+    "setname":"",
+        })
+def get_named_set(args):
+    verbose = False
+    setcollection = args["setcollection"]
+    setname = args["setname"]
+
+    resultset=set()
+    # this next stuff needs to be generalized if there are more kinds of sets
+    if setcollection == "units":
+        resultset = UCU.get_units_set(set_label=setname)
+    return {"value":resultset}
+
+@set_valid_args_and_register({
+    "n":"",
+    "setvalues":"",
+    "vars":{},
+        })
+def choose_n_from_set(args):
+    verbose = False
+    setvalues = args["setvalues"]
+    vars = args["vars"]
+    if verbose: print(">>>setvarname:",pformat(setvalues))
+    if verbose: print(">>>vars choose n:",pformat(vars))
+    if verbose: print(">>>setvalues:",pformat(vars[setvalues]))
+    n_to_get = args["n"]
+    results_list=[]
+    for i in range(n_to_get):
+        results_list.append(vars[setvalues].pop())
+    return {"value":results_list}
+
+
+@set_valid_args_and_register({
+    "from":"",
+    "to":"",
+    "vars":{},
+        })
+def get_conversion_factor(args):
+    verbose = False
+    from_template = args["from"]
+    to_template = args["to"]
+    vars = args["vars"]
+    if verbose: print(">>>from::",pformat(from_template))
+    if verbose: print(">>>to:",pformat(to_template))
+    if verbose: print(">>>vars:",pformat(vars))
+    from_t = Template(from_template)
+    from_units = from_t.render(vars)
+    to_t = Template(to_template)
+    to_units = to_t.render(vars)
+    conv_factor = UCU.get_conversion_factor(from_units,to_units)
+    if verbose: print(">>>conv_factor:",pformat(conv_factor),from_units,to_units)
+    return {"value":conv_factor}
 
 # XXXX
 # @set_valid_args_and_register({

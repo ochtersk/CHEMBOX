@@ -14,7 +14,7 @@ def detectChemicalType(formula):
     type: string "element"|"ionic"|"covalent"|"acid"|"water"
 
     """
-    verbose = True
+    verbose = False
     #if verbose: print(f"detect formula:{formula}")
     if formula in ['H2O','HOH']:
         return "water"

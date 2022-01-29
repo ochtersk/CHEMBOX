@@ -66,11 +66,17 @@ class DataValue():
         self.quantity=Q_(magnitude_SF,units)
         if verbose: print("DV Q_:",self.quantity)
         self.magnitude = magnitude_SF
-        self.units= self.quantity.units
+        if verbose: print(f"formatted units:{self.quantity.units:%}")
+        if verbose: print(f"formatted type:{type(self.quantity.units)}")
+        self.units=self.quantity.units
 
 
     def __str__(self):
-        return str(self.quantity)
+        str = f"{self.quantity.magnitude}"
+        units = f"{self.quantity.units:%}"
+        if units == '':
+            return str
+        return " ".join([str,units])
 
     def __repr__(self):
         mag = repr(self.magnitude)

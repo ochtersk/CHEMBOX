@@ -27,7 +27,7 @@ def create_conversion(PintDefinition):
     # put the conversion factors in the right place
     # the destination units should be in convfactorDV[1] and the starting units in
     # convfactorDV[0]
-    verbose = True
+    verbose = False
 
     ureg.define(PintDefinition)
 
@@ -52,7 +52,7 @@ def do_convert(inputDV,finalunits):
         if there's no way to convert the units
 
     """
-    verbose = True
+    verbose = False
     result = inputDV.quantity.to(finalunits)
     resultDV = DV.DataValue(result.magnitude,result.units)
     return resultDV

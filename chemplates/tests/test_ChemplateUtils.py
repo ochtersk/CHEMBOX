@@ -110,7 +110,7 @@ def test_answer_template():
         'text': {'value': 'mass/volume = (10.00 gram)/2.00 milliliter = 5.0000 gram / milliliter'},
         'text2': {'value': 'mag units = 7.777 km/hr'},
         'text3': {'value': 'density = 5.00 gram / milliliter'},
-        'text4': {'value': 'two = 2.00 dimensionless'},
+        'text4': {'value': 'two = 2.00'},
         'units': {'value': 'gram / milliliter'},
         'value': {'value': str(DV.DataValue("2.000 milliliter"))}
         }
@@ -190,9 +190,9 @@ def check_chemplatefile(filename):
         assert str("\n".join(res)) == answer
 
 
-def test_chemplatefiles():
+def test_validate_chemplatefile_prototypes():
     # this doesn't work for all chemplate files because some are intentionally malformed (008)
-    chemplateFilenamesList = glob.glob('chemplates/testchemplates/chemplate009*.json')
+    chemplateFilenamesList = glob.glob('chemplates/testchemplates/chemplatexxx00*.json')
     #print("files:",pformat(chemplateFilenamesList))
     for file in chemplateFilenamesList:
         check_chemplatefile(file)

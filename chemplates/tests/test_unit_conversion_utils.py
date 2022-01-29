@@ -73,9 +73,9 @@ def test_get_metric_prefix_set(setname,abbrev,lookfor,shouldntsee):
 
 
 @pytest.mark.parametrize("setname,abbrev,lookfor,shouldntsee", [
-    ("length_common_english", "NO", ["feet","foot"], ["ft","mi"]),
-    ("length_common_english", "YES",  ["ft","mi"], ["feet","foot"]),
-    ("length_common_english", "BOTH",  ["ft","mi","feet","foot"],["m","meter"]),
+    ("length_common_english", "NO", ["feet","foot"], ["ft"]),
+    ("length_common_english", "YES",  ["ft"], ["feet","foot"]),
+    ("length_common_english", "BOTH",  ["ft","feet","foot"],["m","meter"]),
     ])
 def test_get_units_set_setname(setname,abbrev,lookfor,shouldntsee):
     units_set = get_units_set(set_label=setname, abbreviations=abbrev)

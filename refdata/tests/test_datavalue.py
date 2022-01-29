@@ -44,11 +44,12 @@ def test_datavalue_mul_float_int():
     y = 2
     z = x*y
     #print("repr z:",repr(z))
-    assert str(z) == "5 dimensionless"
+    #print("str z:",str(z),"<<")
+    assert str(z) == "5"
     y = 2.0000001
     z = x*y
     #print("repr z:",repr(z))
-    assert str(z) == "4.628 dimensionless"
+    assert str(z) == "4.628"
 
 
 def test_datavalue_div():
@@ -71,11 +72,11 @@ def test_datavalue_div_float_int():
     y = 2
     z = x/y
     #print("repr z:",repr(z))
-    assert str(z) == "1 dimensionless"
+    assert str(z) == "1"
     y = 2.0000000000001
     z = x/y
     #print("repr z:",repr(z))
-    assert str(z) == "1.212 dimensionless"
+    assert str(z) == "1.212"
 
 
 def test_datavalue_add_ok():
@@ -91,11 +92,11 @@ def test_datavalue_add_float_int():
     y = 2
     z = x+y
     #print("repr z:",repr(z))
-    assert str(z) == "4 dimensionless"
+    assert str(z) == "4"
     y = 2.001
     z = x+y
     #print("repr z:",repr(z))
-    assert str(z) == "4.415 dimensionless"
+    assert str(z) == "4.415"
 
 
 def test_datavalue_add_fail_units():
@@ -118,15 +119,15 @@ def test_datavalue_sub_ok_int_float():
     y = 22
     z = x-y
     #print("repr z:",repr(z))
-    assert str(z) == "0 dimensionless" # rounded to nearest  unit
+    assert str(z) == "0" # rounded to nearest  unit
     y=22.000
     z = x-y
     #print("repr z:",repr(z))
-    assert str(z) == "0.4 dimensionless"
+    assert str(z) == "0.4"
     y=22.001
     z = x-y
     #print("repr z:",repr(z))
-    assert str(z) == "0.413 dimensionless"
+    assert str(z) == "0.413"
 
 
 
@@ -144,4 +145,4 @@ def test_datavalue_sub_fail_units():
 def test_DataValue_object_default():
     x = DV.DataValue()
     #print("DV:",repr(x))
-    assert str(x) == "0.0 dimensionless"
+    assert str(x) == "0.0"

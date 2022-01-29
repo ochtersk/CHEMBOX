@@ -21,7 +21,7 @@ def isinrange(val,low,high):
 
 @pytest.mark.parametrize("units", [
     ({'units':"gram"}),
-    ({'units':'dimensionless'}),
+    ({'units':''}),
     ({'units':"meter / second"}),
 ])
 @pytest.mark.parametrize("repl,low,high", [
@@ -39,7 +39,8 @@ def test_random_value(repl,low,high,units):
     assert isinrange(x['value'].magnitude,low,high)
     ux = DG.random_value(urepl)
     assert isinrange(ux['value'].magnitude,low,high)
-    assert str(ux['value'].units) == units['units']
+    val = ux['value']
+    assert str(f"{val.units:%}") == units['units']
     #print(pformat(str(ux)))
 
 @pytest.mark.parametrize("number, answerstr", [
@@ -57,7 +58,7 @@ def test_exactnumbers(number,answerstr):
 
 @pytest.mark.parametrize("expression, vars, answer", [
     #I use str because I don't want rounding errors in comparison
-    ("1+2",{},"3 dimensionless" ),
+    ("1+2",{},"3" ),
     ("one + two", {'one' : DV.DataValue("1"), 'two': DV.DataValue("2")}, DV.DataValue("3")),
     ("one + two", {'one' : DV.DataValue("1 g"), 'two': DV.DataValue("2 g")}, DV.DataValue("3 gram")),
 ])
