@@ -6,6 +6,8 @@
 
 # code enhancements
 1. DONE: chemistry formulas : use pyvalem
+1. DONE: intermediate values in Chemplates
+1. DONE: simple units conversion chemplate
 1. reactions
     1. bulk import of balanced reactions
        1. duplicate equation detector

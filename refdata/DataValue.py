@@ -21,7 +21,7 @@ class DataValue():
         do math with two DataValues do the right thing with sig figs and units
 
     """
-    def __init__(self, magnitude = None , units = None, unitsformat = '',exact = False ):
+    def __init__(self, magnitude = None , units = None, units_format = '',exact = False ):
         verbose = False
         if verbose: print("----------")
         magnitude_in = magnitude
@@ -64,16 +64,26 @@ class DataValue():
         magnitude_SF = SF.SciSigFig(str(magnitude), exact = exact )
         if verbose: print("DV mag_SF:",magnitude_SF.dump())
         self.quantity=Q_(magnitude_SF,units)
+        self.units_format = units_format
         if verbose: print("DV Q_:",self.quantity)
         self.magnitude = magnitude_SF
+        # the % inthe next line is Pint - % means don't use the string "dimensionless"
         if verbose: print(f"formatted units:{self.quantity.units:%}")
         if verbose: print(f"formatted type:{type(self.quantity.units)}")
         self.units=self.quantity.units
 
 
     def __str__(self):
+        verbose = False
         str = f"{self.quantity.magnitude}"
-        units = f"{self.quantity.units:%}"
+        # the % inthe next line is Pint - % means don't use the string "dimensionless"
+        pint_format_spec = "%" # don't use "dimensionless"
+        if "abbrev" in self.units_format:
+            pint_format_spec += "~"
+        if "HTML" in self.units_format:
+            pint_format_spec += "H"
+        units = f"{self.quantity.units:{pint_format_spec}}"
+        if verbose: print(f"{pint_format_spec =}      {units =}")
         if units == '':
             return str
         return " ".join([str,units])

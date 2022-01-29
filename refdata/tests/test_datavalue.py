@@ -8,12 +8,43 @@ import CHEMBOX.refdata.DataValue as DV
     ("2.4","minute * mole / liter","2.4 minute * mole / liter"),
     ("2.4","liter / minute ** 2","2.4 liter / minute ** 2"),
 ])
-def test_DataValue_object(mag, units, answer):
+def test_DataValue_object_noformat(mag, units, answer):
     x = DV.DataValue(mag, units)
     #print("DV repr:"+repr(x))
     assert str(x) == answer
     assert str(x.magnitude) == mag
     assert str(x.units) == units
+
+@pytest.mark.parametrize("spec_in,mag,units,answer", [
+    ("","2.4","liter / minute","2.4 liter / minute"),
+    ("","2.4e+2","liter / minute","2.4e+2 liter / minute"),
+    ("","2.4","minute * mole / liter","2.4 minute * mole / liter"),
+    ("","2.4","liter / minute ** 2","2.4 liter / minute ** 2"),
+    ("abbrev","2.4","liter / minute","2.4 l / min"),
+    ("abbrev","2.4e+2","liter / minute","2.4e+2 l / min"),
+    ("abbrev","2.4","minute * mole / liter","2.4 min * mol / l"),
+    ("abbrev","2.4","liter / minute ** 2","2.4 l / min ** 2"),
+    ("HTML","2.4","liter / minute","2.4 liter/minute"),
+    ("HTML","2.4e+2","liter / minute","2.4e+2 liter/minute"),
+    ("HTML","2.4","minute * mole / liter","2.4 minute mole/liter"),
+    ("HTML","2.4","liter / minute ** 2","2.4 liter/minute<sup>2</sup>"),
+    ("abbrev,HTML","2.4","liter / minute","2.4 l/min"),
+    ("abbrev,HTML","2.4e+2","liter / minute","2.4e+2 l/min"),
+    ("abbrev,HTML","2.4","minute * mole / liter","2.4 min mol/l"),
+    ("abbrev,HTML","2.4","liter / minute ** 2","2.4 l/min<sup>2</sup>"),
+])
+def test_DataValue_object_format(mag, units, answer, spec_in):
+    x = DV.DataValue(mag, units, units_format = spec_in)
+    #print("DV repr:"+repr(x))
+    assert str(x) == answer
+    assert str(x.magnitude) == mag
+    assert str(x.units) == units
+
+
+
+
+
+
 
 
 @pytest.mark.parametrize("mag,mag_exact,units,answer", [
