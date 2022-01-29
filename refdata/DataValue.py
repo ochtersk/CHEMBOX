@@ -70,6 +70,7 @@ class DataValue():
         # the % inthe next line is Pint - % means don't use the string "dimensionless"
         if verbose: print(f"formatted units:{self.quantity.units:%}")
         if verbose: print(f"formatted type:{type(self.quantity.units)}")
+        if verbose: print(f"{self.units_format =}")
         self.units=self.quantity.units
 
 

@@ -2,6 +2,7 @@ import pytest
 from pprint import pformat
 import CHEMBOX.chemplates.DataGenerators as DG
 import CHEMBOX.refdata.DataValue as DV
+import re
 
 #print("Known:",pformat(DG.known_generators))
 #for name, func in DG.known_generators.items():
@@ -20,9 +21,14 @@ def isinrange(val,low,high):
 
 
 @pytest.mark.parametrize("units", [
-    ({'units':"gram"}),
-    ({'units':''}),
-    ({'units':"meter / second"}),
+    ({'units':"gram",'formatted':'gram', 'units_format':''}),
+    ({'units':'', 'formatted':'', 'units_format':'%'}),
+    ({'units':"meter / second",'formatted':'meter / second', 'units_format':''}),
+    ({'units':"gram", 'formatted':'g', 'units_format':'abbrev'}),
+    ({'units':"meter / second",'formatted':'m / s', 'units_format':'abbrev'}),
+    ({'units':"meter / second**2",'formatted':'m / s ** 2', 'units_format':'abbrev'}),
+    ({'units':"meter / second**2",'formatted':'meter/second<sup>2</sup>', 'units_format':'HTML'}),
+    ({'units':"meter / second**2",'formatted':'m/s<sup>2</sup>', 'units_format':'abbrev,HTML'}),
 ])
 @pytest.mark.parametrize("repl,low,high", [
     ({}, 0.01,10),
@@ -30,18 +36,21 @@ def isinrange(val,low,high):
     ({'type': 'approx','approx' : {'target' : 10, 'pct': 10}}, 9,11),
 ])
 def test_random_value(repl,low,high,units):
-    #print("\ntestrepl:",pformat(repl))
+    verbose = False
+    if verbose: print("\ntestrepl:",pformat(repl))
     x = DG.random_value(repl)
     urepl = repl.copy()
     urepl.update(units)
-    #print("urepl:",pformat(urepl), "units:",pformat(units))
-    #print("test x:",pformat(x))
+    if verbose: print("urepl:",pformat(urepl), "units:",pformat(units))
+    if verbose: print("test x:",pformat(x))
     assert isinrange(x['value'].magnitude,low,high)
     ux = DG.random_value(urepl)
     assert isinrange(ux['value'].magnitude,low,high)
     val = ux['value']
-    assert str(f"{val.units:%}") == units['units']
-    #print(pformat(str(ux)))
+    strval = str(val)
+    just_units = re.sub('^[^ ]+ ?', '', strval )
+    if verbose: print(f"{strval =} {just_units =}  {units['formatted'] =}")
+    assert just_units == units['formatted']
 
 @pytest.mark.parametrize("number, answerstr", [
     #I use str because I don't want rounding errors in comparison
@@ -92,7 +101,7 @@ def test_copy_text(text, answer ):
     ({"volume" : { "rxndom_value" : {"range" : {"low": 11.0, "high": 12.0}, "units" : "mL" }}},
         [' unknown generator (rxndom_value)']),
     ({"volume" : { "random_value" : {"rxnge" : {"low": 11.0, "high": 12.0}, "units" : "mL" }}},
-        [" supplied arg (rxnge) is not valid.valid: dict_keys(['type', 'range', 'approx', 'exact', 'nsf_range', 'units'])"]),
+        [" supplied arg (rxnge) is not valid.valid: dict_keys(['type', 'range', 'approx', 'exact', 'nsf_range', 'units', 'units_format'])"]),
     ({"volume" : { "random_value" : {"range" : {"lxw": 11.0, "high": 12.0}, "units" : "mL" }}},
         [" supplied subarg (lxw) to arg (range) is not valid.valid args: dict_keys(['low', 'high'])"]),
     ({"volume" : { "random_value" : {"range" : {"low": 11.0, "hxgh": 12.0}, "units" : "mL" }}},

@@ -72,6 +72,7 @@ These are the various data generators for ChemplateUtils.
             'exact' : '',
             'nsf_range' : [3,5],
             'units' : '',
+            'units_format' : '',
         })
 def random_value(repl=None):
     """generate a random DataValue
@@ -112,7 +113,8 @@ def random_value(repl=None):
         use_units = None
     else:
         use_units = config['units']
-    datavalue = DV.DataValue(magnitude=str(mag), units=use_units)
+    use_format = config['units_format']
+    datavalue = DV.DataValue(magnitude=str(mag), units=use_units, units_format = use_format)
     if verbose: print("randomValue return:",pformat(datavalue))
     return {'value' : datavalue}
 
