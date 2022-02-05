@@ -2,6 +2,7 @@ from CHEMBOX.chemplates.unit_conversion_utils import *
 import CHEMBOX.refdata.DataValue as DV
 import pint
 import pytest
+import re
 from pprint import pformat
 
 @pytest.mark.parametrize("PintDefinition,unitslist", [
@@ -63,6 +64,22 @@ def test_get_metric_prefix_set(setname,lookfor,shouldntsee):
         assert (item in prefix_set), f"can't find {item} in {*prefix_set,}"
     for item in shouldntsee:
         assert (item not in prefix_set), f"found {item} in {*prefix_set,}"
+
+@pytest.mark.parametrize("prefix_setname, metric_setname,prefixes,bases", [
+    ("3-3", "si_common", ["deca","centi"], ["meter","gram","liter"]),
+    ("15-15","si_common",["femto","peta"], ["meter","gram","liter"]),
+    ("24-24","si_common",["zepto","yotta"], ["meter","gram","liter"]),
+    ])
+def test_get_metric_set(prefix_setname,metric_setname,prefixes,bases):
+    units_set = get_units_set(metric_prefixes= prefix_setname, set_label=metric_setname)
+    #print(pformat(units_set))
+    reg = r"^("+"|".join(prefixes)+r")("+"|".join(bases)+r")"
+    #print(f"{reg =}")
+    found = 0
+    for units in units_set:
+        if x := re.search(reg,units):
+            found +=1
+    assert found == 2, f"Couldn't find {reg =} in {units_set =}"
 
 
 

@@ -23,7 +23,7 @@ def test_process_chemplate():
     for answer in results_dict["answers"]:
         assert isinstance(answer, str)
 
-#XXX someday make tempplate validator functions
+#DONE someday make tempplate validator functions
 def process_chemplatefile(filename):
     with open(filename, 'r') as handle:
         try:
@@ -58,21 +58,26 @@ def _validate_answer(answer,answers):
     return True
 
 
-def test_chemplatefiles_question_types():
+@pytest.fixture
+def collect_question_files():
+    chemplateFilenamesList = glob.glob('render/testchemplates/question_chemplate000*.json')
+    return sorted(chemplateFilenamesList)
+
+
+def test_chemplatefiles_question_types(collect_question_files):
     # this doesn't work for all chemplate files because some are intentionally malformed (008)
     verbose = False
-    chemplateFilenamesList = glob.glob('render/testchemplates/question_chemplate0002*.json')
-    if verbose: print("files:",pformat(chemplateFilenamesList))
-    for file in chemplateFilenamesList:
-        #check_chemplatefile(file)
-        (chemplateDict,chemplateNameList) = process_chemplatefile(file)
-        for name in chemplateNameList:
-            if verbose: print(f"file:{file} chemplate:{name}")
-            chemplate = chemplateDict[name]
-            answer = chemplateDict[name + "_answer"]
-            if verbose: print("chemplate::\n",pformat(chemplate),f"\n_answer n:{name}:",answer)
+    verbose_results = True
+    for filename in collect_question_files:
+        if verbose: print("file:",pformat(filename))
+        (chemplateDict,chemplateNameList) = process_chemplatefile(filename)
+        for CPname in chemplateNameList:
+            if verbose: print(f"file:{filename} chemplate:{CPname}")
+            chemplate = chemplateDict[CPname]
+            answer = chemplateDict[CPname + "_answer"]
+            if verbose: print("chemplate::\n",pformat(chemplate),f"\n_answer n:{CPname}:",answer)
             var = RenderUtils.process_chemplate(chemplate)
-            if verbose: print("res::\n",pformat(var), answer)
+            if verbose or verbose_results: print(f"\n{filename}::\n",pformat(var), answer)
             #check if answer is in in_range
             valid = _validate_answer(answer, var["answers"])
             assert valid == True

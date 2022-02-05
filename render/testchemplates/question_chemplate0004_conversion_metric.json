@@ -1,0 +1,54 @@
+# template version 5
+#   cleaned up trailing dict commas (json won't allow)
+#   made the whole thing a dict, rather than list
+# entries will be processed in the order sources, questionlist, answerlist
+
+{"conversion1": {
+  "sources" : {
+  # "source_name" : {"function": {"param":value, ... } }, ...
+    "units_set" : { "get_named_set" : {"setcollection" : "prefixes", "setname" : "3-3", "combine_with" : "si_common" }},
+    "magnitude" : { "random_value" : {"range" : {"low": 5.5, "high": 6.0}, "units":""}}
+  },
+
+  "intermediate_1" : {
+  # "source_name" : {"function": {"param":value, ... } },
+    "toconv": {"choose_n_from_set" : {"n":2, "setvalues": "units_set","use_values":"true"}}
+      },
+
+  "intermediate_2" : {
+  "convf": {"get_conversion_factor" : {"from": "{{toconv[0]}}", "to":"{{toconv[1]}}","use_values":"true"}}
+          },
+
+
+
+  "questionlist" : [
+  # template with vars, callables(chemformula, chemreaction)
+  # uses template_variables (see below)
+    {"fill_template":{ "template":"Convert {{magnitude}} {{toconv[0]}} to {{toconv[1]}}. (1 {{toconv[0]}} = {{convf}})", "use_values":"true"}}
+  ],
+  "answerlist" : [
+  # uses values from sources
+  #answer_template: an answer_template is a dictionary with the following
+  #             keys (those currently used have asterisks. The others
+  #             are currently ignored):
+  #    'value' : the equation to get the answer, which is parsed and evaluated
+  #    'units' : units desired for the answer
+  #    'text' : text to be rendered as a jinja2 template. It could explain
+  #              the answer with variable values filled in
+  #    'correct' : a boolean flag tell in this answer is correct.
+    {
+      "value" : { "parse_expression":{ "expression":"magnitude*convf", "use_values":"true"}},
+      "units" : {"fill_template":{"template":"{{toconv[1]}}", "use_values":"true"}},
+      "text" :  {"fill_template":{"template":" {{magnitude}}*{{convf}} {toconv[1]}}/(1 {{toconv[0]}}) ", "use_values":"true"}},
+      "correct" : {"copy_text":{"text": "true"}}
+    },
+    {
+      "value" : { "parse_expression":{ "expression":"magnitude/convf", "use_values":"true"}},
+      "units" : {"fill_template":{"template":"{{toconv[1]}}", "use_values":"true"}},
+      "text" :  {"fill_template":{"template":" {{magnitude}}*{{convf}} {toconv[1]}}/(1 {{toconv[0]}}) ", "use_values":"true"}},
+      "correct" : {"copy_text":{"text": "False"}}
+    },
+  ]
+},
+  "conversion1_answer":{"range":{"low": 0, "high": 2.2e34}, }
+}

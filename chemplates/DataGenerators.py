@@ -208,16 +208,22 @@ def copy_text(args):
 @set_valid_args_and_register({
     "setcollection":"",
     "setname":"",
+    "combine_with":"",
         })
 def get_named_set(args):
     verbose = False
     setcollection = args["setcollection"]
     setname = args["setname"]
-
+    if "combine_with" in args:
+        combine_with = args["combine_with"]
+    else:
+        combine_with = None
     resultset=set()
     # this next stuff needs to be generalized if there are more kinds of sets
     if setcollection == "units":
         resultset = UCU.get_units_set(set_label=setname)
+    elif setcollection == "prefixes":
+        resultset = UCU.get_units_set(metric_prefixes= setname, set_label=combine_with)
     return {"value":resultset}
 
 @set_valid_args_and_register({

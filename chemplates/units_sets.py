@@ -11,6 +11,7 @@ units_sets["prefixes"]["24-24"] = {
     "milli",
     "centi",
     "deci",
+    "", #base
     "deca",
     "hecto",
     "kilo",
@@ -26,6 +27,7 @@ units_sets["prefixes"]["3-3"] = {
     "milli",
     "centi",
     "deci",
+    "", #base
     "deca",
     "hecto",
     "kilo",
@@ -38,6 +40,7 @@ units_sets["prefixes"]["15-15"] = {
     "milli",
     "centi",
     "deci",
+    "", #base
     "deca",
     "hecto",
     "kilo",
@@ -51,4 +54,18 @@ units_sets["units"]["length_common_english"] = {
     "yard",
     "foot",
     "inch",
+}
+units_sets["units"]["si_base"] = {
+	"meter",
+	"second",
+	"ampere",
+	"candela",
+	"gram",
+	"mole",
+	"kelvin",
+}
+units_sets["units"]["si_common"] = {
+	"meter",
+	"gram",
+    "liter",
 }

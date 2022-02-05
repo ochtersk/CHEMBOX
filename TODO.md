@@ -19,10 +19,11 @@
     1. reaction db
 1. Units conversions
   1. DONE use Pint https://pint.readthedocs.io/en/stable/index.html
-  1. add flag to DataValue __init__ to get abbrev units.
+  1. DONE add flag to DataValue __init__ to get abbrev units.
   1. update expression parser to take DVs (maybe this works already?)
   1. DONE check out how to do conversions
   1. DONE add tests for DV*scalar and DV/scalar
+  1. test get_named_set with datagenerator
 
 # code fixes
 1. fix function names to snake case

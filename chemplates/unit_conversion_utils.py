@@ -95,9 +95,12 @@ def _get_units_sets_set(type=None,set_label=None):
     ------
 
     """
+    verbose = False
     return_set =set();
     if (set_label) in UNIT_SETS.units_sets[type]:
-        return_set = UNIT_SETS.units_sets[type][set_label]
+        if verbose: print(f"{type =} {set_label =} = {UNIT_SETS.units_sets[type] =}")
+        return_set = set(UNIT_SETS.units_sets[type][set_label])
+        if verbose: print(f"from: _get_units_sets_set {type =} {set_label =} {return_set =}")
     else:
         raise KeyError(f"key {set_label} does not exist in {units_sets[type]}")
     return return_set
@@ -144,7 +147,7 @@ def _get_matching_dimensionality(dimensionality=None,compatible_with=None):
     return units_set
 
 
-def get_units_set(dimensionality=None, compatible_with=None,set_label=None):
+def get_units_set(dimensionality=None, metric_prefixes=None,set_label=None):
     """get_units_set get a set of units to convert from/to
 
     Parameters
@@ -161,6 +164,16 @@ def get_units_set(dimensionality=None, compatible_with=None,set_label=None):
     ------
 
     """
+    verbose = False
+    if metric_prefixes is not None:
+        prefixes = get_metric_prefix_set(metric_prefixes)
+        unit_set = _get_units_sets_set("units",set_label)
+        if verbose: print(f"{metric_prefixes =}{prefixes =}\n{set_label =} {unit_set =}")
+        unit = unit_set.pop()
+        metric_set = set()
+        for pref in prefixes:
+            metric_set.add(f"{pref}{unit}")
+        return metric_set
     if set_label is not None:
         type="units"
         return _get_units_sets_set(type,set_label)
