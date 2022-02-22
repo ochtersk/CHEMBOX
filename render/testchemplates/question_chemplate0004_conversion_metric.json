@@ -6,16 +6,27 @@
 {"conversion1": {
   "sources" : {
   # "source_name" : {"function": {"param":value, ... } }, ...
-    "units_set" : { "get_named_set" : {"setcollection" : "prefixes", "setname" : "3-3", "combine_with" : "si_common" }},
+    "prefix_set" : { "get_named_set" : {"setcollection" : "prefixes", "setname" : "3-3"}},
+    "base_set" : { "get_named_set" : {"setcollection" : "units", "setname" : "si_common"}},
     "magnitude" : { "random_value" : {"range" : {"low": 5.5, "high": 6.0}, "units":""}}
   },
 
   "intermediate_1" : {
   # "source_name" : {"function": {"param":value, ... } },
+    "unit_set": {"choose_n_from_set" : {"n":1, "setvalues": "base_set","use_values":"true"}}
+      },
+  "intermediate_2" : {
+  # "source_name" : {"function": {"param":value, ... } },
+    "units_set": {"permute_sets" : {"setA": "prefix_set", "setB": "unit_set","use_values":"true"}}
+      },
+
+
+  "intermediate_3" : {
+  # "source_name" : {"function": {"param":value, ... } },
     "toconv": {"choose_n_from_set" : {"n":2, "setvalues": "units_set","use_values":"true"}}
       },
 
-  "intermediate_2" : {
+  "intermediate_4" : {
   "convf": {"get_conversion_factor" : {"from": "{{toconv[0]}}", "to":"{{toconv[1]}}","use_values":"true"}}
           },
 

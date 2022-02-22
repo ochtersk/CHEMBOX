@@ -127,3 +127,13 @@ def test_args_validator(test_dict, answer):
         result = DG.validate_args(DoD)
         #print("Name:", name, " result:", result)
         assert answer == result
+
+@pytest.mark.parametrize("A, B, result", [
+    (["A1","A2"], ["B1","B2"], ["A1B1", "A2B1", "A1B2", "A2B2"] ),
+])
+def test_permute_sets(A,B,result):
+    vars = {"A":A, "B":B}
+    resultset = DG.permute_sets({"setA":"A", "setB":"B", "vars":vars})
+    assert len(resultset["value"]) == len(result), f"set lengths don't match: {resultset =} {result =}"
+    for checkstr in result:
+        assert checkstr in resultset["value"], f"string {checkstr =} not in {resultset =}"

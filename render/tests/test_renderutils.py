@@ -69,7 +69,7 @@ def test_chemplatefiles_question_types(collect_question_files):
     verbose = False
     verbose_results = True
     for filename in collect_question_files:
-        if verbose: print("file:",pformat(filename))
+        if verbose: print("--------------------------------------file:",pformat(filename))
         (chemplateDict,chemplateNameList) = process_chemplatefile(filename)
         for CPname in chemplateNameList:
             if verbose: print(f"file:{filename} chemplate:{CPname}")

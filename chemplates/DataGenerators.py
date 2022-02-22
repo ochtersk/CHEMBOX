@@ -79,8 +79,13 @@ def random_value(repl=None):
 
     Parameters
     ----------
-    repl : dictionary
-        a dictionary containing any defaults which shoud be replaced/updated.
+    type (str): context for generating random number 'range'|'approx'|'exact' default: range,
+    range (dict): numerical range for range context default: {'low': 0.01, 'high': 10.0},
+    approx (dict): target and variance for approximate random number default: {'target' : 9.99999, 'pct': 10.0},
+    exact (str): magnitude to use for an exact number no default,
+    nsf_range (list): number of sig figs to create result with, default:[3,5],
+    units (str) :string to use for units, default: ''
+    units_format (str): how to format the units, 'abbrev' and/or 'HTML', default: '',
 
     Returns
     -------
@@ -208,22 +213,31 @@ def copy_text(args):
 @set_valid_args_and_register({
     "setcollection":"",
     "setname":"",
-    "combine_with":"",
         })
 def get_named_set(args):
+    """get a named set of information
+
+    Parameters
+    ----------
+        setcollection (required str): which collection to get the set from,
+        setname (required str): which set to get from that collection,
+
+
+    Returns
+    -------
+    the specified set of strings
+
+    Raises
+    ------
+    AttributeError
+        if no attribute, value pair or dict is specified.
+
+    """
     verbose = False
     setcollection = args["setcollection"]
     setname = args["setname"]
-    if "combine_with" in args:
-        combine_with = args["combine_with"]
-    else:
-        combine_with = None
     resultset=set()
-    # this next stuff needs to be generalized if there are more kinds of sets
-    if setcollection == "units":
-        resultset = UCU.get_units_set(set_label=setname)
-    elif setcollection == "prefixes":
-        resultset = UCU.get_units_set(metric_prefixes= setname, set_label=combine_with)
+    resultset = UCU.get_units_set(type=setcollection,set_label=setname)
     return {"value":resultset}
 
 @set_valid_args_and_register({
@@ -239,9 +253,10 @@ def choose_n_from_set(args):
     if verbose: print(">>>vars choose n:",pformat(vars))
     if verbose: print(">>>setvalues:",pformat(vars[setvalues]))
     n_to_get = args["n"]
+    tempvals = set(vars[setvalues])
     results_list=[]
     for i in range(n_to_get):
-        results_list.append(vars[setvalues].pop())
+        results_list.append(tempvals.pop())
     return {"value":results_list}
 
 
@@ -266,30 +281,37 @@ def get_conversion_factor(args):
     if verbose: print(">>>conv_factor:",pformat(conv_factor),from_units,to_units)
     return {"value":conv_factor}
 
-# XXXX
-# @set_valid_args_and_register({
-#     "from_units":"",
-#     "to_units":"",
-#     "input_value":"",
-#         })
-# def convert(args):
-#     """convert a value
-#
-#     Parameters
-#     ----------
-#     text = text to copy
-#
-#     Returns
-#     -------
-#     the argument
-#
-#     Raises
-#     ------
-#     AttributeError
-#         if no attribute, value pair or dict is specified.
-#
-#     """
-#     verbose = False
-#     text = args["text"]
-#     result = text
-#     return {"value":result}
+@set_valid_args_and_register({
+    "setA":"",
+    "setB":"",
+        })
+def permute_sets(args):
+    """create a permutation of two sets - the result is a set of strings from
+        set A catenated with stringgs from set B
+
+    Parameters
+    ----------
+        setA (required set of str): set of strings for the first part of the catenation
+        setB (required set of str): set of strings for the second part of the catenation
+
+    Returns
+    -------
+    a set of strings
+
+    Raises
+    ------
+    AttributeError
+        if no attribute, value pair or dict is specified.
+
+    """
+    verbose = False
+    setAname = args["setA"]
+    setBname = args["setB"]
+    vars = args["vars"]
+    if verbose: print(f"permute_sets {setAname =} {setBname =}")
+    if verbose: print(">>>vars:",pformat(vars))
+    resultset=set()
+    for a in vars[setAname]:
+        for b in vars[setBname]:
+            resultset.add(f"{a}{b}")
+    return {"value":resultset}

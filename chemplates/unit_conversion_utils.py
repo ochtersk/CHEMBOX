@@ -105,23 +105,6 @@ def _get_units_sets_set(type=None,set_label=None):
         raise KeyError(f"key {set_label} does not exist in {units_sets[type]}")
     return return_set
 
-def get_metric_prefix_set(set_label=None):
-    """get_metric_prefix_set get a set of metric prefixes to convert from/to
-
-    Parameters
-    ----------
-    set_label 3-3|15-15|24-24 to get sets of metric prefixes ("3-3"=10^3- to 10^-3, etc)
-
-    Returns
-    -------
-    a set of strings which can be used as metric prefixes
-
-    Raises
-    ------
-
-    """
-    type="prefixes"
-    return _get_units_sets_set(type,set_label)
 
 def _get_matching_dimensionality(dimensionality=None,compatible_with=None):
     units_set = set()
@@ -147,7 +130,7 @@ def _get_matching_dimensionality(dimensionality=None,compatible_with=None):
     return units_set
 
 
-def get_units_set(dimensionality=None, metric_prefixes=None,set_label=None):
+def get_units_set(dimensionality=None, type=None, set_label=None):
     """get_units_set get a set of units to convert from/to
 
     Parameters
@@ -165,23 +148,13 @@ def get_units_set(dimensionality=None, metric_prefixes=None,set_label=None):
 
     """
     verbose = False
-    if metric_prefixes is not None:
-        prefixes = get_metric_prefix_set(metric_prefixes)
-        unit_set = _get_units_sets_set("units",set_label)
-        if verbose: print(f"{metric_prefixes =}{prefixes =}\n{set_label =} {unit_set =}")
-        unit = unit_set.pop()
-        metric_set = set()
-        for pref in prefixes:
-            metric_set.add(f"{pref}{unit}")
-        return metric_set
-    if set_label is not None:
-        type="units"
-        return _get_units_sets_set(type,set_label)
     if dimensionality is not None:
-
         units_set = _get_matching_dimensionality(dimensionality=dimensionality)
         #print("with dimensionality:",pformat(units_set))
         return units_set
+    if type is None:
+        type="units"
+    return _get_units_sets_set(type,set_label)
 
 
 def create_conversion_parameters(unit_set):
