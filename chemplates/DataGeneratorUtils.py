@@ -20,7 +20,7 @@ def validate_dictOfDataGenerators(dictOfGenerators):
     msg=""
     for var,dataGenerator in dictOfGenerators.items():
         result = DG.validate_args(dataGenerator)
-        #print("result",len(result),":",pformat(result),"<\n")
+        #print("result",len(result),":",pformat(result),"<<\n")
         if len(result) != 0:
             msg += "\n  ".join([f"dataGenerator key({var}):",*result])
         if len(msg)>0: msg += "\n"
