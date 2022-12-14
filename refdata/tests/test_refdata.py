@@ -1,6 +1,6 @@
 import pytest
-import CHEMBOX.refdata.DataValue as DV
-import CHEMBOX.refdata.RefData as RD
+import refdata.DataValue as DV
+import refdata.RefData as RD
 
 #pytestmark = pytest.mark.skip("all tests still WIP")
 @pytest.mark.parametrize("Cprop,Cname,answer", [
@@ -37,11 +37,11 @@ def test_RefData_object_fail_proponly():
     with pytest.raises(AssertionError):
         x = RD.RefData(chemicalProperty = "destinyXX")
         #destinyXX is not a typo
-        assert str(z) == "DV: 4.4 g"
+        assert str(x) == "DV: 4.4 g"
 
 
 def test_RefData_object_fail_duplicate():
     with pytest.raises(AssertionError):
         x = RD.RefData(chemicalProperty = "destiny", chemicalName ="duplicate")
         #destinyXX is not a typo
-        assert str(z) == "DV: 4.4 g"
+        assert str(x) == "DV: 4.4 g"

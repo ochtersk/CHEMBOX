@@ -1,4 +1,4 @@
-import CHEMBOX.refdata.DataValue as DV
+import refdata.DataValue as DV
 #db setup code
 from random import randint
 from tinydb import TinyDB, Query

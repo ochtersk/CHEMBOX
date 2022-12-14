@@ -1,6 +1,6 @@
 import pytest
 from pprint import pformat
-import CHEMBOX.chemistry.RxnComponent as RC
+import chemistry.RxnComponent as RC
 
 def test_new_RxnComponent_primitive():
     component = RC.RxnComponent(3,"NaOH")

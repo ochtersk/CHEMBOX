@@ -1,6 +1,6 @@
 from collections import Counter
 from . import ureg, Q_
-import CHEMBOX.sigfig.createsf as SF
+import sigfig.createsf as SF
 
 class DataValue():
     """DataValue class for ChemBox to hold values and units
@@ -22,7 +22,7 @@ class DataValue():
 
     """
     def __init__(self, magnitude = None , units = None, units_format = '',exact = False ):
-        verbose = False
+        verbose = True
         if verbose: print("----------")
         magnitude_in = magnitude
         units_in = units
@@ -75,7 +75,7 @@ class DataValue():
 
 
     def __str__(self):
-        verbose = False
+        verbose = True
         str = f"{self.quantity.magnitude}"
         # the % inthe next line is Pint - % means don't use the string "dimensionless"
         pint_format_spec = "%" # don't use "dimensionless"

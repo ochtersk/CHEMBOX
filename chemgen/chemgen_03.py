@@ -8,7 +8,7 @@ sys.path.insert(0,"/Users/ochtersk/src/")
 #print(sys.path)
 
 
-import CHEMBOX.render.RenderUtils as RenderUtils
+import render.RenderUtils as RenderUtils
 
 env = Environment(
     loader=PackageLoader('CHEMBOX', 'templates'),

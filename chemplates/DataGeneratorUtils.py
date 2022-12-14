@@ -1,6 +1,6 @@
 import pytest
 from pprint import pformat
-import CHEMBOX.chemplates.DataGenerators as DG
+import chemplates.DataGenerators as DG
 
 def validate_listOfDataGenerators(generatorList):
     """ validates a list of DataGenerators

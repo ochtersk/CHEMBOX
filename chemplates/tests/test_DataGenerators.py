@@ -1,7 +1,7 @@
 import pytest
 from pprint import pformat
-import CHEMBOX.chemplates.DataGenerators as DG
-import CHEMBOX.refdata.DataValue as DV
+import chemplates.DataGenerators as DG
+import refdata.DataValue as DV
 import re
 
 #print("Known:",pformat(DG.known_generators))

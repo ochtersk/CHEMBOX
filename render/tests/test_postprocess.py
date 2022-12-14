@@ -1,6 +1,6 @@
 import pytest
 from pprint import pformat
-import CHEMBOX.render.Renderer as Render
+import render.Renderer as Render
 
 
 @pytest.mark.parametrize("text,request_list", [

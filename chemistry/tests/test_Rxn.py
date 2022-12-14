@@ -1,7 +1,7 @@
 import pytest
 from pprint import pformat
 from pyvalem.reaction import Reaction
-import CHEMBOX.chemistry.Rxn as Rxn
+import chemistry.Rxn as Rxn
 
 def test_new_Rxn():
     reaction = Rxn.Rxn('O2 + 2H2 -> 2H2O')

@@ -1,8 +1,8 @@
 import pytest
 from pprint import pformat
-import CHEMBOX.chemplates.Chemplate as CP
-import CHEMBOX.refdata.DataValue as DV
-import CHEMBOX.render.Renderer as Render
+import chemplates.Chemplate as CP
+import refdata.DataValue as DV
+import render.Renderer as Render
 
 answer_item=[
   CP.Chemplate(DoD={'correct': {'value': 'true'},

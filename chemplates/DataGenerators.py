@@ -3,9 +3,9 @@ from copy import deepcopy
 from functools import wraps
 from py_expression_eval import Parser
 from jinja2 import Template
-import CHEMBOX.refdata.DataValue as DV
-import CHEMBOX.sigfig.createsf as SF
-import CHEMBOX.chemplates.unit_conversion_utils as UCU
+import refdata.DataValue as DV
+import sigfig.createsf as SF
+import chemplates.unit_conversion_utils as UCU
 
 
 # known gnerators keeps a dict of known generators, where teh name of the
@@ -97,7 +97,7 @@ def random_value(repl=None):
         if no attribute, value pair or dict is specified.
 
     """
-    verbose = False
+    verbose = True
     config = deepcopy(random_value.valid_args)
     if verbose: print("repl:",pformat(repl))
     if repl is not None:

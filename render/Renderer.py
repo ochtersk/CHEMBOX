@@ -1,7 +1,7 @@
 from pprint import pformat
-import CHEMBOX.chemplates.Chemplate as CP
-import CHEMBOX.refdata.DataValue as DV
-import CHEMBOX.chemplates.ChemplateUtils as CPU
+import chemplates.Chemplate as CP
+import refdata.DataValue as DV
+import chemplates.ChemplateUtils as CPU
 
 
 def is_correct(target_item):

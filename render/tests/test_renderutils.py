@@ -3,11 +3,11 @@ from pprint import pformat
 import glob
 import re
 import commentjson
-import CHEMBOX.chemplates.Chemplate as CP
-import CHEMBOX.chemplates.ChemplateUtils as CPU
-import CHEMBOX.refdata.DataValue as DV
-import CHEMBOX.render.Renderer as Render
-import CHEMBOX.render.RenderUtils as RenderUtils
+import chemplates.Chemplate as CP
+import chemplates.ChemplateUtils as CPU
+import refdata.DataValue as DV
+import render.Renderer as Render
+import render.RenderUtils as RenderUtils
 
 with open('/Users/ochtersk/src/CHEMBOX/chemplates/template_v5.json', 'r') as handle:
     chemplatedict = commentjson.load(handle)

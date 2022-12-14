@@ -43,6 +43,7 @@ class Chemplate():
                     self.__set(ID1, attr1, DoD[ID1][attr1])
         elif (ID is not None and attribute is not None):
             self.__set(ID, attribute, value)
+        #print("chemplate_inint_!:",pformat(self))
 
     def __repr__(self):
         string=pformat(self.data)

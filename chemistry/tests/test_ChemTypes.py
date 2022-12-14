@@ -1,6 +1,6 @@
 import pytest
 from pprint import pformat
-import CHEMBOX.chemistry.ChemTypes as CT
+import chemistry.ChemTypes as CT
 
 @pytest.mark.parametrize("formula,type",[
 ("H2O","water"),

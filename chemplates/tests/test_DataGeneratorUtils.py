@@ -1,7 +1,7 @@
 import pytest
 import json
 from pprint import pformat
-import CHEMBOX.chemplates.DataGeneratorUtils as DGU
+import chemplates.DataGeneratorUtils as DGU
 
 # This is a short list because most of it is tested in t3est_DataGenerators
 @pytest.mark.parametrize("test_list, answer", [

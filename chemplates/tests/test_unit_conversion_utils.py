@@ -1,5 +1,5 @@
-from CHEMBOX.chemplates.unit_conversion_utils import *
-import CHEMBOX.refdata.DataValue as DV
+from chemplates.unit_conversion_utils import *
+import refdata.DataValue as DV
 import pint
 import pytest
 import re

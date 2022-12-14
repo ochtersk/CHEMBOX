@@ -1,8 +1,8 @@
 from pprint import pformat
-from CHEMBOX.refdata import ureg, Q_
-import CHEMBOX.refdata.DataValue as DV
-import CHEMBOX.sigfig.createsf as SF
-import CHEMBOX.chemplates.units_sets as UNIT_SETS
+from refdata import ureg, Q_
+import refdata.DataValue as DV
+import sigfig.createsf as SF
+import chemplates.units_sets as UNIT_SETS
 
 def create_conversion(PintDefinition):
     """create_conversion creates a units conversion
@@ -102,7 +102,7 @@ def _get_units_sets_set(type=None,set_label=None):
         return_set = set(UNIT_SETS.units_sets[type][set_label])
         if verbose: print(f"from: _get_units_sets_set {type =} {set_label =} {return_set =}")
     else:
-        raise KeyError(f"key {set_label} does not exist in {units_sets[type]}")
+        raise KeyError(f"key {set_label} does not exist in {UNIT_SETS.units_sets[type]}")
     return return_set
 
 

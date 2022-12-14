@@ -1,6 +1,5 @@
-from setuptools import setup, find_packages
+# setup.py
 
-setup(name="PACKAGENAME", packages=find_packages())
-# setup(name='sigfig',
-#       packages=['sigfig']
-#       )
+import setuptools
+
+setuptools.setup()

@@ -1,5 +1,5 @@
 import pytest
-import CHEMBOX.refdata.DataValue as DV
+import refdata.DataValue as DV
 
 
 @pytest.mark.parametrize("mag,units,answer", [

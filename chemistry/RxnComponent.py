@@ -1,6 +1,6 @@
 from pprint import pformat
 from pyvalem.formula import Formula
-import CHEMBOX.chemistry.ChemTypes as CT
+import chemistry.ChemTypes as CT
 
 class RxnComponent(Formula):
     """RxnComponent class for ChemBox to handle reactants and products

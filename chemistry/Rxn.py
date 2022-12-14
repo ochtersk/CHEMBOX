@@ -1,6 +1,6 @@
 from pprint import pformat
 from pyvalem.reaction import Reaction
-import CHEMBOX.chemistry.RxnComponent as RC
+import chemistry.RxnComponent as RC
 
 class Rxn(Reaction):
     """Rxn class for ChemBox to handle reactions

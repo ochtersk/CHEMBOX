@@ -3,9 +3,9 @@ import commentjson
 import glob
 import json
 from pprint import pformat
-import CHEMBOX.chemplates.Chemplate as CP
-import CHEMBOX.chemplates.ChemplateUtils as CPU
-import CHEMBOX.refdata.DataValue as DV
+import chemplates.Chemplate as CP
+import chemplates.ChemplateUtils as CPU
+import refdata.DataValue as DV
 
 def test_create_Chemplate_from_sources_sources_only():
     source = CP.Chemplate(DoD={"rand1" :{'random_value' :{'type' : 'exact', 'exact' : '123.456'}}})

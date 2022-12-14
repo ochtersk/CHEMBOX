@@ -1,5 +1,5 @@
 import pytest
-import CHEMBOX.refdata.DataUnits as DU
+import refdata.DataUnits as DU
 
 
 

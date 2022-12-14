@@ -1,9 +1,9 @@
 from pprint import pformat
 from random import shuffle
-import CHEMBOX.chemplates.Chemplate as CP
-import CHEMBOX.refdata.DataValue as DV
-import CHEMBOX.render.Renderer as Render
-import CHEMBOX.chemplates.ChemplateUtils as CPU
+import chemplates.Chemplate as CP
+import refdata.DataValue as DV
+import render.Renderer as Render
+import chemplates.ChemplateUtils as CPU
 
 def validate_QA_template(template):
     QA_model = {

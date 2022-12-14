@@ -1,9 +1,9 @@
 import copy
 from pprint import pformat
 #from py_expression_eval import Parser
-import CHEMBOX.chemplates.Chemplate as CP
-import CHEMBOX.chemplates.DataGenerators as DG
-import CHEMBOX.chemplates.DataGeneratorUtils as DGU
+import chemplates.Chemplate as CP
+import chemplates.DataGenerators as DG
+import chemplates.DataGeneratorUtils as DGU
 
 """ These are functions that do utility work using Chemplates.
 """
@@ -48,7 +48,7 @@ def create_Chemplate_from_sources(sources, overrides=None, values=None):
         overrides = CP.Chemplate(DoD= {})
     if verbose: print()
     if verbose: print("sources:",pformat(sources))
-    if verbose: print("overrides:",pformat(overrides))
+    if verbose: print("overrides:",type(overrides),pformat(overrides))
     if verbose: print("values:",pformat(values))
     locSrc = copy.deepcopy(sources)
     locSrc.updateWith(overrides)
